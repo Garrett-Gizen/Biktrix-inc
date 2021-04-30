@@ -2,7 +2,7 @@
 This is the "Warehouse" them and a place for our ne Shopify template.
 
 
-## How To Setup Locally [WINDOWS ONLY]
+### How To Setup Locally [WINDOWS ONLY]
 
 If you wanting to work on any template in the future locally through Shopify, this how you do it.
 
@@ -28,14 +28,14 @@ We need Chocolatey to install the Themekit that Shopify provides and a command l
 6. In VSC, pull up the terminal and type the following to install the Themekit;
 
 `choco install themekit`
-<br><br>
+<br>
 
 
 7. Create a Private Shopify Application on the Shopify webpage you want to work on. These are the following steps;
   - Admin > Apps > Manage Private Apps</li>
   - Enable Private App Development is checked</li>
   - Create the new private app and select in the "Themes" category "Reading and Write" permissions.</li>
-<br>
+
  
 8. Back into VSC, create the following file in the main directory of your local theme;
 "config.yml"
@@ -49,7 +49,7 @@ development:
   theme_id:
   store:
   ```
-  <br><br>
+  <br>
 
 11. Back in the terminal in VSC, run the following code;
   
