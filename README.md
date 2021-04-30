@@ -1,7 +1,7 @@
+![Shopify](https://cdn.shopify.com/s/files/1/1616/8731/articles/biktrix-logo_800x.jpg?v=1592000121)
 # Shopify V2
 This is the "Warehouse" them and a place for our ne Shopify template.
-
-
+<br><br>
 ## How To Setup Locally [WINDOWS ONLY]
 
 If you wanting to work on any template in the future locally through Shopify, this how you do it.
