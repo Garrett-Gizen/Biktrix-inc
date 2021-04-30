@@ -1,7 +1,7 @@
 # Shopify V2
-This is the "Warehouse" template and a place for our new template for our Shopify account.
+This is the "Warehouse" them and a place for our ne Shopify template.
 <br><br><br>
-# How To Setup Locally [WINDOWS ONLY]
+## How To Setup Locally [WINDOWS ONLY]
 
 If you wanting to work on any template in the future locally through Shopify, this how you do it.
 
@@ -20,13 +20,13 @@ If you wanting to work on any template in the future locally through Shopify, th
 <i>All of these applications are NEEDED in order to not only code in liquid but to make sure the taglines exist in your code for easier access.</i></li>
 <br>
 
-<li>Export the theme you would like to edit that is a virgin or editted copy and place it in a directory of your choosing. Than load that directory into VSC.</li>
+<li>Export the theme you would like to edit, that is either a virgin or editted copy and place it in a directory of your choosing. Than load that directory into VSC.</li>
 <br>
 
-<li>Install Chocolatey. You can find the following how to do this on the following link;<br>
+<li>Install Chocolatey. You can find the instructions in the following link;<br>
 https://chocolatey.org/install
 <br>
-<i>We need Chocolatey to install the Themekit that Shopify provides and a commandline</i></li>
+<i>We need Chocolatey to install the Themekit that Shopify provides and a command line</i></li>
 <br>
 
 <li>In VSC, pull up the terminal and type the following to install the Themekit [without quotations]
@@ -48,7 +48,7 @@ https://chocolatey.org/install
 "config.yml"</li>
 <br>
 
-<li>Now in this file, you are wanting to paste the following code inside of it;
+<li>Now in this file, you are wanting to paste the following code inside of it; [without quotations]
 
 "development:
   <br>
@@ -59,10 +59,11 @@ https://chocolatey.org/install
   store:"</li>
 <br>
 
-<li>Back in the terminal in VSC, run the code theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]" and replace the following information. 
-<br>
+<li>Back in the terminal in VSC, run the following code
+  
+theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]" 
 
-<i>You can find your new API password in the new private applicatio you just created.</i></li>
+<i>Replace the variables with the correct information. You can find the password in your new Private Application.</i>
 <br>
 
 <li>After running the command, a list of theme's will popup. It should look something like this;</li>
@@ -74,18 +75,17 @@ https://chocolatey.org/install
   [120203215001] Theme export  www-biktrix-com-virgin-warehouse ...<br>
   <br>
   
-  The idea is to copy the theme we want to work on, in this case "120203215001" and place it as the "theme_id" in our configiration file.
+  The idea is to copy the theme variable we want to work on, in this case "120203215001" and place it as the "theme_id" in our configiration file.
   <br>  <br>
   
   <li>After that, fill in the rest of the information by adding your API password as "password:" and "store:" as the Shopify store link.</li>
   <br>
   
-  <li>Lastly, type the following command in the terminal and vola, you are done. Everytime you save now, it automatically saves to the Shopify theme locally and will be visable
-  on the theme's webpage.
+  <li>Lastly, type the following command in the terminal and voilà, you are done. Everytime you save now, it automatically updates the changes to the Shopify theme online.
   <br> <br>
   theme watch --allow-live
   
-  <i>Just a reminder that this doesn't count for assets, so if you are using any assets locally, you will need to transfer them directly into the theme's folder in Shopify</i>
+  <i>Just a reminder that this doesn't count for assets though, so if you are using any assets locally, you will need to transfer them directly into the theme's folder in Shopify account.</i>
 </ol>
 
 <br><hr>
