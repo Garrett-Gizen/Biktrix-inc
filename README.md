@@ -59,12 +59,12 @@ https://chocolatey.org/install
   store:"</li>
 <br>
 
-<li>Back in the terminal in VSC, run the following code
+<li>Back in the terminal in VSC, run the following code; [KEEP QUOTATIONS]
   
 theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]" 
 
 <i>Replace the variables with the correct information. You can find the password in your new Private Application.</i>
-<br>
+<br><br>
 
 <li>After running the command, a list of theme's will popup. It should look something like this;</li>
 <br>
