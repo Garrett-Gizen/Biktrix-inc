@@ -48,10 +48,12 @@ If you wanting to work on any template in the future locally through Shopify, th
 
 <li>Now in this file, you are wanting to paste the following code inside of it;
 
-`development:
+```
+development:
   password: 
   theme_id:
-  store:`
+  store:
+  ```
   </li><br>
 
 <li>Back in the terminal in VSC, run the following code;
