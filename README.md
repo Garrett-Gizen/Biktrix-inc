@@ -80,7 +80,9 @@ development:
 </li>
   <br>
   
-  <li>Lastly, type the following command in the terminal and voilà, you are done.:+1: Everytime you save now, it automatically updates the changes to the Shopify theme online.
+  <li>Lastly, type the following command in the terminal and voilà, you are done.:+1: 
+  
+  Everytime you save now, it automatically updates the changes to the Shopify theme online.
   
  `theme watch --allow-live`
   
