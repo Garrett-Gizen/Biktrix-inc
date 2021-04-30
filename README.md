@@ -18,12 +18,10 @@ If you wanting to work on any template in the future locally through Shopify, th
 
 4. Export the theme you would like to edit, that is either a virgin or editted copy and place it in a directory of your choosing. Than load that directory into VSC.
 
-5. [Install Chocolatey]("https://chocolatey.org/install").
-
-*We need Chocolatey to install the Themekit that Shopify provides and a command line*
+5. [Install Chocolatey]("https://chocolatey.org/install"). We need Chocolatey to install the Themekit that Shopify provides and a command line
 
 
-6.In VSC, pull up the terminal and type the following to install the Themekit;
+6. In VSC, pull up the terminal and type the following to install the Themekit;
   
 `choco install themekit`
 
@@ -34,7 +32,6 @@ If you wanting to work on any template in the future locally through Shopify, th
   - Create the new private app and select in the "Themes" category "Reading and Write" permissions.</li>
  
 8. Back into VSC, create the following file in the main directory of your local theme;
-
 "config.yml"
 
 
