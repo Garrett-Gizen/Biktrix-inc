@@ -54,7 +54,7 @@ development:
   
 `theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]"`
 
-*Replace the variables with the correct information. You can find the password in your new Private Application.*
+***Replace the variables with the correct information. You can find the password in your new Private Application.***
 <br><br>
 
 12. After running the command, a list of theme's will popup. It should look something like this;
@@ -77,6 +77,6 @@ development:
   
  `theme watch --allow-live`
   
-*Just a reminder that this doesn't count for assets though, so if you are using any assets locally, you will need to transfer them directly into the theme's folder in Shopify account.*
+***Just a reminder that this doesn't count for assets though, so if you are using any assets locally, you will need to transfer them directly into the theme's folder in Shopify account.***
 <br><hr>
 @Garrett-Gizen If you have any further questions, please let me know or [click here](https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit) for a more in-depth walkthrough.
