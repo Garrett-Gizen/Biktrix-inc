@@ -28,6 +28,7 @@
 
     {%- comment -%}Few prefech to increase performance on commonly used third-parties{%- endcomment -%}
     <link rel="preload" as="style" href="{{ 'theme.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'main.css' | asset_url }}">
     <link rel="preload" as="script" href="{{ 'theme.min.js' | asset_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com">
     <link rel="preconnect" href="https://fonts.shopifycdn.com">
@@ -38,8 +39,6 @@
 
     {% render 'social-meta-tags' %}
     {% render 'css-variables' %}
-
-    {{ content_for_header }}
 
     <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
 
@@ -122,18 +121,23 @@
     {%- endif -%}
   </head>
 
+
+<header>
+{% section 'announcement-bar' %}
+{% section 'header' %}
+</header>
+
   <body class="warehouse--v1 {% if settings.animation_image_zoom %}features--animate-zoom{% endif%} template-{{ request.page_type | handle }} {% if request.page_type contains '/' %}template-{{ request.page_type | split: '/' | last | handle }}{% endif %}" data-instant-intensity="viewport">
     <a href="#main" class="visually-hidden skip-to-content">{{ 'general.accessibility.skip_to_content' | t }}</a>
     <span class="loading-bar"></span>
 
-    {% section 'announcement-bar' %}
+    
 
     {%- unless request.page_type == 'cart' -%}
       {%- comment -%}As required by Shopify rules, popup must be removed on cart page to remove distraction{%- endcomment -%}
       {% section 'popups' %}
     {%- endunless -%}
 
-    {% section 'header' %}
 
     <main id="main" role="main">
       {{ content_for_layout }}
