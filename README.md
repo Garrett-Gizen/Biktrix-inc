@@ -49,9 +49,13 @@ https://chocolatey.org/install
 <br>
 
 <li>Now in this file, you are wanting to paste the following code inside of it;
+
 "development:
+  <br>
   password: 
+  <br>
   theme_id:
+  <br>
   store:"</li>
 <br>
 
