@@ -24,15 +24,14 @@ If you wanting to work on any template in the future locally through Shopify, th
 <br>
 
 <li>Install Chocolatey. You can find the instructions in the following link;<br>
-https://chocolatey.org/install
+[Install Chocolatey](https://chocolatey.org/install)
 <br>
 <i>We need Chocolatey to install the Themekit that Shopify provides and a command line</i></li>
 <br>
 
-<li>In VSC, pull up the terminal and type the following to install the Themekit [without quotations]
-
+<li>In VSC, pull up the terminal and type the following to install the Themekit  [WITHOUT QUOTATION]
   
-"choco install themekit"</li>
+`choco install themekit`</li>
 <br>
 
 <li>Create a Private Shopify Application on the Shopify webpage you want to work on. These are the following steps;
@@ -48,20 +47,17 @@ https://chocolatey.org/install
 "config.yml"</li>
 <br>
 
-<li>Now in this file, you are wanting to paste the following code inside of it; [without quotations]
+<li>Now in this file, you are wanting to paste the following code inside of it; [WITHOUT QUOTATION]
 
-"development:
-  <br>
+`development:
   password: 
-  <br>
   theme_id:
-  <br>
-  store:"</li>
-<br>
+  store:`
+  </li><br>
 
 <li>Back in the terminal in VSC, run the following code; [KEEP QUOTATIONS]
   
-theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]" 
+`theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]"`
 
 <i>Replace the variables with the correct information. You can find the password in your new Private Application.</i>
 <br><br>
@@ -75,20 +71,23 @@ theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]"
   [120203215001] Theme export  www-biktrix-com-virgin-warehouse ...<br>
   <br>
   
-  The idea is to copy the theme variable we want to work on, in this case "120203215001" and place it as the "theme_id" in our configiration file.
+  The idea is to copy the theme variable we want to work on, in this case `120203215001` and place it as the `theme_id` in our configiration file.
   <br>  <br>
   
-  <li>After that, fill in the rest of the information by adding your API password as "password:" and "store:" as the Shopify store link.</li>
+  <li>
+  
+  After that, fill in the rest of the information by adding your API password as `password:` and `store:` as the Shopify store link.
+</li>
   <br>
   
   <li>Lastly, type the following command in the terminal and voilà, you are done. Everytime you save now, it automatically updates the changes to the Shopify theme online.
-  <br> <br>
-  theme watch --allow-live
+  
+ `theme watch --allow-live`
   
   <i>Just a reminder that this doesn't count for assets though, so if you are using any assets locally, you will need to transfer them directly into the theme's folder in Shopify account.</i>
 </ol>
 
 <br><hr>
 
-<p>If you have any further questions, please let me know through, garrett@biktrix.com or check out this link for a more indepth walkthrough;<br>
-https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit
+<p>@garrett If you have any further questions, please let me know or [click this](https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit) for a more in-depth walkthrough
+
