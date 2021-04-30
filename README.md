@@ -2,7 +2,7 @@
 This is the "Warehouse" them and a place for our ne Shopify template.
 
 
-###### How To Setup Locally [WINDOWS ONLY]
+## How To Setup Locally [WINDOWS ONLY]
 
 If you wanting to work on any template in the future locally through Shopify, this how you do it.
 
