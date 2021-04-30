@@ -91,4 +91,4 @@ development:
 
 <br><hr>
 
-<p>@garrett@biktrix.com If you have any further questions, please let me know or <a href="https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit">click here</a> for a more in-depth walkthrough
+@Garrett-Gizen If you have any further questions, please let me know or <a href="https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit">click here</a> for a more in-depth walkthrough
