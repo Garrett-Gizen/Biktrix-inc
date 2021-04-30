@@ -24,6 +24,7 @@ If you wanting to work on any template in the future locally through Shopify, th
 <br>
 
 <li><a href="https://chocolatey.org/install">Install Chocolatey</a>
+  
 <i>We need Chocolatey to install the Themekit that Shopify provides and a command line</i></li>
 <br>
 
