@@ -64,13 +64,12 @@ development:
 <br><br>
 
 <li>After running the command, a list of theme's will popup. It should look something like this;</li>
-<br>
+
+```
   [119224893593] Biktrix-inc theme (Feb-18-2021)
-  <br>
   [120195055769][live] Warehouse
-  <br>
-  [120203215001] Theme export  www-biktrix-com-virgin-warehouse ...<br>
-  <br>
+  [120203215001] Theme export  www-biktrix-com-virgin-warehouse ...
+ ```
   
   The idea is to copy the theme variable we want to work on, in this case `120203215001` and place it as the `theme_id` in our configiration file.
   <br>  <br>
