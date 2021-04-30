@@ -48,7 +48,7 @@
         "type": "color",
         "id": "background",
         "label": "Background",
-        "default": "#f3f5f6"
+        "default": "#f8f8f8"
       },
       {
         "type": "color",
@@ -213,10 +213,10 @@
         "id": "base_text_font_size",
         "label": "Base size",
         "info": "All texts, including headings, will scale accordingly.",
-        "min": 14,
-        "max": 17,
+        "min": 13,
+        "max": 32,
         "unit": "px",
-        "default": 15
+        "default": 16
       },
       {
         "type": "header",
@@ -226,7 +226,7 @@
         "type": "font_picker",
         "id": "heading_font",
         "label": "Font",
-        "default": "helvetica_n4"
+        "default": "Poppins"
       },
       {
         "type": "header",
@@ -236,7 +236,7 @@
         "type": "font_picker",
         "id": "text_font",
         "label": "Font",
-        "default": "helvetica_n4"
+        "default": "Poppins"
       },
       {
         "type": "checkbox",
