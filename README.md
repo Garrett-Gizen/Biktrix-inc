@@ -24,12 +24,12 @@ If you wanting to work on any template in the future locally through Shopify, th
 <br>
 
 <li>Install Chocolatey. You can find the instructions in the following link;<br>
-[Install Chocolatey](https://chocolatey.org/install)
+  <a href="https://chocolatey.org/install">Install Chocolatey</a>
 <br>
 <i>We need Chocolatey to install the Themekit that Shopify provides and a command line</i></li>
 <br>
 
-<li>In VSC, pull up the terminal and type the following to install the Themekit  [WITHOUT QUOTATION]
+<li>In VSC, pull up the terminal and type the following to install the Themekit;
   
 `choco install themekit`</li>
 <br>
@@ -47,7 +47,7 @@ If you wanting to work on any template in the future locally through Shopify, th
 "config.yml"</li>
 <br>
 
-<li>Now in this file, you are wanting to paste the following code inside of it; [WITHOUT QUOTATION]
+<li>Now in this file, you are wanting to paste the following code inside of it;
 
 `development:
   password: 
@@ -55,7 +55,7 @@ If you wanting to work on any template in the future locally through Shopify, th
   store:`
   </li><br>
 
-<li>Back in the terminal in VSC, run the following code; [KEEP QUOTATIONS]
+<li>Back in the terminal in VSC, run the following code;
   
 `theme get --list -p=[your-api-password] -s="[your-store.myshopify.com]"`
 
@@ -89,5 +89,4 @@ If you wanting to work on any template in the future locally through Shopify, th
 
 <br><hr>
 
-<p>@garrett If you have any further questions, please let me know or [click this](https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit) for a more in-depth walkthrough
-
+<p>@garrett If you have any further questions, please let me know or <a href="https://joepichardo.com/blogs/shopify-liquid-for-beginners/local-shopify-theme-development-with-theme-kit">click here</a> for a more in-depth walkthrough
