@@ -1,5 +1,5 @@
-# Virgin Warehouse Template
-This is the "Warehouse" template without it being tampered and being changed through locally. 
+# Shopify V2
+This is the "Warehouse" template and a place for our new template for our Shopify account.
 <br><br><br>
 # How To Setup Locally [WINDOWS ONLY]
 
