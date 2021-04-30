@@ -23,7 +23,7 @@ If you wanting to work on any template in the future locally through Shopify, th
 <li>Export the theme you would like to edit, that is either a virgin or editted copy and place it in a directory of your choosing. Than load that directory into VSC.</li>
 <br>
 
-<li><a href="https://chocolatey.org/install">Install Chocolatey</a>. You can find the instructions in the following link;<br>
+<li><a href="https://chocolatey.org/install">Install Chocolatey</a>
 <i>We need Chocolatey to install the Themekit that Shopify provides and a command line</i></li>
 <br>
 
