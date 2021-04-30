@@ -35,7 +35,7 @@ We need Chocolatey to install the Themekit that Shopify provides and a command l
   - Admin > Apps > Manage Private Apps</li>
   - Enable Private App Development is checked</li>
   - Create the new private app and select in the "Themes" category "Reading and Write" permissions.</li>
-<br><br> 
+<br>
  
 8. Back into VSC, create the following file in the main directory of your local theme;
 "config.yml"
