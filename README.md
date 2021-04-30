@@ -30,6 +30,8 @@ https://chocolatey.org/install
 <br>
 
 <li>In VSC, pull up the terminal and type the following to install the Themekit [without quotations]
+
+  
 "choco install themekit"</li>
 <br>
 
