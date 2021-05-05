@@ -1,25 +1,35 @@
-{%- if section.settings.show_section -%}
-  <section class="section section--tight" data-section-id="{{ section.id }}" data-section-type="text-with-icons">
-    <div class="container container--flush">
+
+  <section class="section" data-section-id="{{ section.id }}" data-section-type="text-with-icons" style="background-color:{{ section.settings.bg_color }}">
+    <div class="container">
       <div class="text-with-icons {% if section.settings.stack_mobile %}text-with-icons--stacked{% endif %}">
+        
+        <!--For Each Block-->
         {%- for block in section.blocks -%}
+
+           {%- if section.settings.icon_align == 'left' -%}
           <div class="text-with-icons__item" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- elsif section.settings.icon_align == 'center' -%}
+          <div class="text-with-icons__item icon-center" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- elsif section.settings.icon_align == 'right' -%}
+          <div class="text-with-icons__item icon-right" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {% endif %}
+
             <div class="text-with-icons__icon-wrapper">
               {%- if block.settings.custom_icon != blank -%}
                 <img src="{{ block.settings.custom_icon | img_url: '60x' }}" alt="{{ block.settings.custom_icon.alt | escape }}">
               {%- else -%}
-                {%- render 'icon', icon: block.settings.icon, stroke_width: 1.5 -%}
+                <div class="icon-content" style="fill: {{ block.settings.icon_color }};" >{%- render 'icon', icon: block.settings.icon, stroke_width: 1.5 -%}</div>
               {%- endif -%}
             </div>
 
             {%- if block.settings.title != blank or block.settings.content != blank -%}
               <div class="text-with-icons__content-wrapper">
                 {%- if block.settings.title != blank -%}
-                  <p class="text-with-icons__title text--strong">{{ block.settings.title | escape }}</p>
+                  <h3 class="text-with-icons__title">{{ block.settings.title | escape }}</h3>
                 {%- endif -%}
 
                 {%- if block.settings.content != blank -%}
-                  <div class="text-with-icons__content rte">
+                  <div class="text-with-icons__content">
                     {{ block.settings.content  }}
                   </div>
                 {%- endif -%}
@@ -27,10 +37,89 @@
             {%- endif -%}
           </div>
         {%- endfor -%}
+        <!--End For Block -->
+
       </div>
     </div>
   </section>
-{%- endif -%}
+
+<style>
+
+.text-with-icons{
+  padding-bottom: 0px;
+}
+
+.text-with-icons__icon-wrapper svg{
+  width:auto;
+  height:42px;
+}
+
+.text-with-icons__content{
+  font-size:var(--base_text_font_size);
+}
+
+.text-with-icons__item .text-with-icons__icon-wrapper{
+  margin:0.5em 30px 0 0;
+}
+
+.text-with-icons__item .text-with-icons__content-wrapper h3{
+  margin-bottom:15px;
+}
+
+/*CENTER ICON*/
+.text-with-icons__item.icon-center .text-with-icons__icon-wrapper svg{
+  margin:0;
+  margin-bottom:30px;
+}
+
+.text-with-icons__item.icon-center .text-with-icons__icon-wrapper{
+  margin:0;
+}
+
+
+.text-with-icons__item.icon-center{
+  flex-direction: column;
+  text-align:center;
+}
+
+/*RIGHT ICON*/
+.text-with-icons__item.icon-right{
+  flex-direction: row-reverse;
+  text-align:right;
+}
+
+.text-with-icons__item.icon-right .text-with-icons__icon-wrapper{
+  margin:0.5em 0 0 30px;
+}
+
+@media screen and (max-width: 976px) {
+
+.text-with-icons{
+  padding-bottom: 30px;
+}
+
+.text-with-icons__item, .text-with-icons__item.icon-right{
+  flex-direction: column;
+  text-align:center;
+}
+
+.text-with-icons__item .text-with-icons__icon-wrapper svg, .text-with-icons__item.icon-right .text-with-icons__icon-wrapper svg{
+  margin:0;
+  margin-bottom:30px;
+}
+
+.text-with-icons__item .text-with-icons__icon-wrapper, .text-with-icons__item.icon-right .text-with-icons__icon-wrapper{
+  margin:0;
+}
+}
+
+@media screen and (max-width: 640px){
+.text-with-icons--stacked .text-with-icons__item:not(:last-child) {
+    margin-bottom: 60px;
+}
+}
+
+</style>
 
 {% schema %}
 {
@@ -38,17 +127,43 @@
   "max_blocks": 4,
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_section",
-      "label": "Show section",
-      "default": true
+      "type": "select",
+      "id": "icon_align",
+      "label": "Icon Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+                {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
     },
+
     {
       "type": "checkbox",
       "id": "stack_mobile",
       "label": "Stack on mobile",
       "default": false
-    }
+    },  
+
+        {
+          "type": "header",
+          "content": "Background"
+        },
+    {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#ffffff"
+        }
   ],
   "blocks": [
     {
@@ -56,14 +171,33 @@
       "name": "Item",
       "settings": [
         {
+          "type": "header",
+          "content": "Icon / Image"
+        },
+        {
           "type": "select",
           "id": "icon",
           "label": "Icon",
           "options": [
+             {
+              "value": "icon-shipping",
+              "label": "Shipping",
+              "group": "New Icons"
+            },
             {
-              "value": "bi-add-to-cart",
-              "label": "Add to cart",
-              "group": "Shop"
+              "value": "icon-bike",
+              "label": "Bike",
+              "group": "New Icons"
+            },
+            {
+              "value": "icon-warranty",
+              "label": "Warranty",
+              "group": "New Icons"
+            },
+              {
+              "value": "icon-stamp",
+              "label": "Stamp",
+              "group": "New Icons"
             },
             {
               "value": "bi-gift-wrap",
@@ -205,9 +339,20 @@
           "info": "60 x 60px .png with transparency recommended"
         },
         {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Color Icon",
+          "default": "#D2D2D2",
+          "info": "Currently only works for our new icons"
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+        {
           "type": "text",
           "id": "title",
-          "label": "Heading",
+          "label": "Title",
           "default": "Your title"
         },
         {
@@ -219,37 +364,13 @@
       ]
     }
   ],
-  "default": {
-    "blocks": [
-      {
-        "type": "item",
-        "settings": {
-          "icon": "bi-delivery",
-          "title": "Free delivery worldwide"
-        }
-      },
-      {
-        "type": "item",
-        "settings": {
-          "icon": "bi-returns",
-          "title": "Satisfied or refunded"
-        }
-      },
-      {
-        "type": "item",
-        "settings": {
-          "icon": "bi-customer-support",
-          "title": "Top-notch support"
-        }
-      },
-      {
-        "type": "item",
-        "settings": {
-          "icon": "bi-secure-payment",
-          "title": "Secure payments"
-        }
-      }
-    ]
-  }
-}
+    "presets": [
+    {
+      "category": "Image",
+      "name": "Text And Icons",
+      "settings": {}
+    }
+  ]
+} 
+
 {% endschema %}
