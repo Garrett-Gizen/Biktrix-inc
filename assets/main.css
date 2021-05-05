@@ -32,6 +32,7 @@ h1.primary{
   margin-bottom: 45px;
   padding-bottom: 15px;
   position: relative;
+  color:#222021;
 }
 
 h1.primary:before{
@@ -55,10 +56,36 @@ h1.primary:after{
   left: 80px;
 }
 
+h3{
+  font-size:20px;
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  text-transform: uppercase;
+  margin-bottom:15px;
+  color:#222021;
+}
 
 .content p{
   line-height: 50px;
   margin-bottom:60px;
+  color:#616161;
+}
+
+.align-l{
+  padding-left: 60px;
+}
+
+.align-r{
+padding:0;
+padding-right:60px;
+}
+
+.text-r{
+  text-align: right;
+}
+
+.text-c{
+  text-align:center;
 }
 
 /*** BUTTONS ***/
@@ -80,7 +107,7 @@ h1.primary:after{
 }
 
 .btn:hover{
-  background-color:rgb(0, 0, 0, 0.3)!important;
+  background-color:transparent!important;
   color:var(--primary-color);
 }
 
@@ -99,6 +126,27 @@ h1.primary:after{
 
 /*** PANNEL ***/
 
-.content.light{
+
+.section{
+  margin:0;
+  padding:60px 0px;
+}
+
+.content.light, .content.light h1, .content.light p{
   color:white!important;
+}
+
+
+@media screen and (max-width: 999px) {
+
+}
+
+/*** FLICKITY ***/
+
+.flickity-page-dots .dot{
+  background: #c1c1c1;
+}
+
+.flickity-page-dots .dot.is-selected{
+  background:#222021;
 }
