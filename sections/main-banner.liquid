@@ -1,7 +1,7 @@
 {%- if section.settings.image != blank -%}
-    <section class="{{ section.id }}" style="background-image:url('{{ section.settings.image | img_url: 'master' }}')"​​​​​​​>
+    <section class="{{ section.id }} main-banner" style="background-image:url('{{ section.settings.image | img_url: 'master' }}')"​​​​​​​>
         {% else %}
-    <section class="{{ section.id }}" style="background-image:url('{{ 'image_bg.jpg' | asset_url }}')"​​​​​​​>
+    <section class="{{ section.id }} main-banner" style="background-image:url('{{ 'image_bg.jpg' | asset_url }}')"​​​​​​​>
 {%- endif -%}
 
   <div class="container">
@@ -70,13 +70,20 @@
           "id": "image",
           "label": "Select Image"
     }
-    ]
+  ],
+    "presets": [
+    {
+      "category": "Main",
+      "name": "Main Banner",
+      "settings": {}
+    }
+  ]
   }
 {% endschema %}
 
 
 <style>        
-.{{ section.id }} {
+.main-banner {
 	width:100%;
 	height: 675px;
 	background-repeat: no-repeat;
@@ -88,7 +95,7 @@
   background-position-y: center;
 }
 
-.{{ section.id }}::after{
+.main-banner::after{
     content: "";
     position: absolute;
     width: 100%;
@@ -99,7 +106,7 @@
     z-index: 0;
 }
 
-.{{ section.id }} .content{
+.main-banner .content{
   width:41.666%;
   word-break: break-word;
 }
@@ -107,19 +114,19 @@
 
 
 @media screen and (max-width: 999px) {
-  .{{ section.id }} .content{
+  .main-banner .content{
     width:100%;
   }
 }
 
 @media screen and (max-width: 640px) {
-  .{{ section.id }}{
+  .main-banner{
     height:auto;
     padding:15% 0;
     background-position-x: center;
 
   }
-  .{{ section.id }} .content p, .{{ section.id }} .content h1,{
+  .main-banner .content p, .main-banner .content h1,{
     line-height:40px;
   }
 }
