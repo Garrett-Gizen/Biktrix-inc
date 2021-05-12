@@ -2,6 +2,15 @@
 # Shopify V2
 This is the "Warehouse" them and a place for our ne Shopify template.
 <br><br>
+## What Files Should I Edit?
+Below are the files you can either edit or fix for small changes, such as sections.
+- Sections
+- Snippets
+- Templates
+- Assets
+
+Anything else can jeopardizing the majority of the website and can affect all pages. If you still need any questions, please let me know @Garrett and I will inform you how to tackle your request.
+<br><br>
 ## How To Setup Locally [WINDOWS ONLY]
 
 If you wanting to work on any template in the future locally through Shopify, this how you do it.
