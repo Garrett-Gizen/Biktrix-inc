@@ -41,6 +41,7 @@
     {% render 'css-variables' %}
 
     <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
+     <link rel="stylesheet" href="{{ 'main.css' | asset_url }}">
 
     {% render 'microdata-schema' %}
 
@@ -103,7 +104,9 @@
     {%- endif -%}
 
     <script src="{{ 'theme.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'custom.js' | asset_url }}" defer></script>
+    <script src="{{ 'custom.js' | asset_url }}" defer></script>\
+
+    <script src="https://kit.fontawesome.com/9e530cc1ce.js"></script>
 
     {%- if request.page_type != 'cart' -%}
       <script>
@@ -125,6 +128,7 @@
 <header>
 {% section 'announcement-bar' %}
 {% section 'header' %}
+{{content_for_header}}
 </header>
 
   <body class="warehouse--v1 {% if settings.animation_image_zoom %}features--animate-zoom{% endif%} template-{{ request.page_type | handle }} {% if request.page_type contains '/' %}template-{{ request.page_type | split: '/' | last | handle }}{% endif %}" data-instant-intensity="viewport">
@@ -146,8 +150,7 @@
     {%- if request.page_type == 'blog' or request.page_type == 'article' or request.page_type == 'page' -%}
       {% section 'static-newsletter' %}
     {%- endif -%}
-
-    {% section 'text-with-icons' %}
+    
     {% section 'footer' %}
 
     <ul hidden>
