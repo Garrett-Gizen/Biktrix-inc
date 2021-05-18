@@ -12,42 +12,6 @@
     ------------------------------------------------------------------------------
     {% endcomment %}
 
-    {%- if section.settings.show_share_buttons -%}
-      {%- capture share_buttons -%}
-        {%- assign share_url = shop.url | append: product.url | url_param_escape -%}
-        {%- assign twitter_text = product.title | url_param_escape -%}
-        {%- assign pinterest_description = product.description | strip_html | truncatewords: 15 | url_param_escape -%}
-        {%- assign pinterest_image = product.featured_media | img_url: '1024x' | prepend: 'https:' -%}
-
-        <ul class="social-media__item-list list--unstyled" role="list">
-          <li class="social-media__item social-media__item--facebook">
-            <a href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">{%- render 'icon', icon: 'facebook' -%}</a>
-          </li>
-
-          <li class="social-media__item social-media__item--pinterest">
-            <a href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.pinterest_pin' | t }}">{%- render 'icon', icon: 'pinterest' -%}</a>
-          </li>
-
-          <li class="social-media__item social-media__item--twitter">
-            <a href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">{%- render 'icon', icon: 'twitter' -%}</a>
-          </li>
-
-          <li class="social-media__item">
-            <a href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">{% render 'icon', icon: 'email' %}</a>
-          </li>
-        </ul>
-      {%- endcapture -%}
-    {%- endif -%}
-
-    <div class="product-meta">
-      {%- if template.name == 'product' and template != 'product.quick-view' -%}
-        <h1 class="product-meta__title heading h1">{{ product.title }}</h1>
-      {%- else -%}
-        <h3 class="product-meta__title heading h2">
-          <a href="{{ product.url }}">{{ product.title }}</a>
-        </h3>
-      {%- endif -%}
-
       {%- capture product_labels -%}
         {%- for tag in product.tags -%}
           {%- if tag contains '__label:' -%}
@@ -82,25 +46,14 @@
         </div>
       {%- endif -%}
 
-      {%- if section.settings.show_vendor or section.settings.show_sku -%}
-        <div class="product-meta__reference">
-          {%- if section.settings.show_vendor -%}
-            {%- assign vendor_handle = product.vendor | handle -%}
-            {%- assign collection_for_vendor = collections[vendor_handle] -%}
 
-            {%- unless collection_for_vendor.empty? -%}
-              <a class="product-meta__vendor link link--accented" href="{{ collection_for_vendor.url }}">{{ product.vendor }}</a>
-            {%- else -%}
-              <a class="product-meta__vendor link link--accented" href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
-            {%- endunless -%}
-          {%- endif -%}
-
-          {%- if section.settings.show_sku -%}
-            <span class="product-meta__sku" {% if selected_variant.sku == blank %}style="display: none"{% endif %}>
-              {{- 'product.general.sku' | t -}} <span class="product-meta__sku-number">{{ selected_variant.sku }}</span>
-            </span>
-          {%- endif -%}
-        </div>
+    <div class="product-meta">
+      {%- if template.name == 'product' and template != 'product.quick-view' -%}
+        <h1 class="product-meta__title heading h1">{{ product.title }}</h1>
+      {%- else -%}
+        <h3 class="product-meta__title heading h2">
+          <a href="{{ product.url }}">{{ product.title }}</a>
+        </h3>
       {%- endif -%}
 
       {%- if section.settings.show_reviews_badge -%}
@@ -122,14 +75,7 @@
         </a>
       {%- endif -%}
 
-      {%- if section.settings.show_share_buttons -%}
-        <div class="product-meta__share-buttons hidden-phone">
-          {{ share_buttons }}
-        </div>
-      {%- endif -%}
     </div>
-
-    <hr class="card__separator">
 
     {%- if request.page_type == 'index' and section.settings.show_description and product.description != blank and section.settings.description_below_add_to_cart == false -%}
       <div class="product-meta__description rte">
@@ -184,7 +130,6 @@
             <div class="product-form__option" data-selector-type="{{ option_selector_type }}">
               {%- case option_selector_type -%}
                 {%- when 'color' -%}
-                  <span class="product-form__option-name text--strong">{{ option.name }}: <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
 
                   <div class="color-swatch-list color-swatch-list--large">
                     {%- for value in option.values -%}
@@ -192,19 +137,18 @@
                       {%- capture color_id -%}{{ option_name }}-{{ forloop.index }}{%- endcapture -%}
 
                       {%- assign color_swatch_name = value | handle | append: '.png' -%}
-                      {%- assign color_swatch_image = images[color_swatch_name] -%}
 
                       <div class="color-swatch {% if downcased_value == 'white' or downcased_value == 'blanc' %}color-swatch--white{% endif %}">
                         <input class="color-swatch__radio product-form__single-selector" type="radio" name="{{ option_name }}" id="{{ color_id }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-position="{{ option.position }}">
-                        <label class="color-swatch__item lazyload" for="{{ color_id }}" {% if color_swatch_image != blank %}data-bg="{{ color_swatch_image | img_url: '64x64' }}"{% else %}style="background-color: {{ value | replace: ' ', '' | downcase }}"{% endif %} title="{{ value | escape }}">
+                        <label class="color-swatch__item lazyload" for="{{ color_id }}" style="background-image: url({{ color_swatch_name | asset_url }});" title="{{ value | escape }}">
                           <span class="visually-hidden">{{ value }}</span>
-                          {%- render 'icon', icon: 'cross-sold-out' -%}
+                          {%- render 'icon', icon: 'icon-disabled' -%}
                         </label>
                       </div>
                     {%- endfor -%}
                   </div>
                 {%- when 'variant' -%}
-                  <span class="product-form__option-name text--strong">{{ option.name }}: <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
+                  <span class="product-form__option-name text--strong">{{ option.name }} <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
 
                   <div class="variant-swatch-list">
                     {%- capture option_name -%}option{{ option.position }}{%- endcapture -%}
@@ -232,7 +176,7 @@
                     {%- endfor -%}
                   </div>
                 {%- when 'block' -%}
-                  <span class="product-form__option-name text--strong">{{ option.name }}: <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
+                  <span class="product-form__option-name text--strong">{{ option.name }} <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
 
                   <div class="block-swatch-list">
                     {%- for value in option.values -%}
@@ -247,8 +191,32 @@
                     {%- endfor -%}
                   </div>
                 {%- when 'select' -%}
-                  <label for="{{ option_name }}" class="product-form__option-name text--strong">{{ option.name }}: <span class="product-form__selected-value">{{ option.selected_value }}</span></label>
+                <div class="product-varient-title">
 
+                  <!--CREATES MODAL [Creates the variables. No JS needed.]-->
+                  {% assign modal_title_option = option.name %}
+                  {% assign modal_tite_sub = modal_title_option |  remove: "Select " | downcase  | replace: ' ', '-' %}
+                  {% assign modal_tite = "modal_" | append: modal_tite_sub | append: "_title"  %}
+                  
+                  {% assign modal_content_page = "modal_" | append: modal_tite_sub | append: "_content"  %}
+                  {% assign modal_content = section.settings[modal_content_page] %}
+
+                  <label id="product-varient-option" for="{{ option_name }}" class="product-form__option-name text--strong">{{ option.name }}</label> <span class="product-form__selected-value">{{ option.selected_value }}</span>
+                  <div class="modal_title">
+                    <button class="modal_link_btn" type="button">{{section.settings[modal_tite]}}</button>
+                  </div>
+
+                  <!-- The Modal -->
+                  <div class="modal-new">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <span class="close">&times;</span>
+                      {{pages[modal_content].content}}
+                    </div>
+
+                  </div>
+
+                  </div>
                   <div class="select-wrapper select-wrapper--primary">
                     {%- render 'icon', icon: 'arrow-bottom' -%}
 
@@ -258,6 +226,7 @@
                       {%- endfor -%}
                     </select>
                   </div>
+
               {%- endcase -%}
             </div>
           {%- endfor -%}
@@ -277,6 +246,10 @@
       {%- else -%}
         <input type="hidden" name="id" data-sku="{{ selected_variant.sku }}" value="{{ selected_variant.id }}">
       {%- endunless -%}
+
+
+
+<div class="bold_options" data-product-id="{{ product.id }}"></div>
 
       <div class="product-form__info-list">
         <div class="product-form__info-item">
@@ -431,14 +404,29 @@
       </div>
     {%- endif -%}
   </div>
+  </div>
 
-  {%- if section.settings.show_payment_button and product.selected_or_first_available_variant.available == false -%}
-    <style>
-      #shopify-section-{{ section.id }} .shopify-payment-button {
-        display: none;
-      }
-    </style>
-  {%- endif -%}
+  <style>
+    .product-varient-title{
+      line-height:20px;
+    }
+
+    .product-form__option-name {
+      margin-bottom: 0px;
+    width: fit-content;
+    display: inline-flex;
+    }
+
+    .modal_link_btn{
+      color: #0C7FD6;
+      margin-bottom:15px;
+      font-size:14px;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  
 
   {% comment %}
   ------------------------------------------------------------------------------
@@ -448,6 +436,8 @@
   THE EXACT SAME ATTRIBUTES.
   ------------------------------------------------------------------------------
   {% endcomment %}
+
+
 
   <script type="application/json" data-product-json>
     {
@@ -486,4 +476,6 @@
       {%- endif -%}
     }
   </script>
-</div>
+
+
+
