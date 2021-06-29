@@ -1,0 +1,380 @@
+
+  <section class="section" data-section-id="{{ section.id }}" data-section-type="text-with-icons" style="background-color:{{ section.settings.bg_color }}">
+    <div class="container">
+      <div class="text-with-icons {% if section.settings.stack_mobile %}text-with-icons--stacked{% endif %}">
+        
+        <!--For Each Block-->
+        {%- for block in section.blocks -%}
+
+           {%- if section.settings.icon_align == 'left' -%}
+          <div class="text-with-icons__item" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- elsif section.settings.icon_align == 'center' -%}
+          <div class="text-with-icons__item icon-center" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- elsif section.settings.icon_align == 'right' -%}
+          <div class="text-with-icons__item icon-right" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {% endif %}
+
+            <div class="text-with-icons__icon-wrapper">
+              {%- if block.settings.custom_icon != blank -%}
+                <img src="{{ block.settings.custom_icon | img_url: '60x' }}" alt="{{ block.settings.custom_icon.alt | escape }}">
+              {%- else -%}
+                <div class="icon-content" style="fill: {{ block.settings.icon_color }};" >{%- render 'icon', icon: block.settings.icon, stroke_width: 1.5 -%}</div>
+              {%- endif -%}
+            </div>
+
+            {%- if block.settings.title != blank or block.settings.content != blank -%}
+              <div class="text-with-icons__content-wrapper">
+                {%- if block.settings.title != blank -%}
+                  <h5 class="text-with-icons__title">{{ block.settings.title | escape }}</h5>
+                {%- endif -%}
+
+                {%- if block.settings.content != blank -%}
+                  <div class="text-with-icons__content">
+                    {{ block.settings.content  }}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+        <!--End For Block -->
+
+      </div>
+    </div>
+  </section>
+
+<style>
+
+.text-with-icons{
+  padding-bottom: 0px;
+}
+
+.text-with-icons__item{
+  padding:30px 0;
+}
+
+.text-with-icons__icon-wrapper svg{
+  width:auto;
+  height:42px;
+}
+
+.text-with-icons__content{
+  font-size:var(--base_text_font_size);
+}
+
+.text-with-icons__item .text-with-icons__icon-wrapper{
+  margin:0.5em 30px 0 0;
+}
+
+.text-with-icons__item .text-with-icons__content-wrapper h3{
+  margin-bottom:15px;
+}
+
+/*CENTER ICON*/
+.text-with-icons__item.icon-center .text-with-icons__icon-wrapper svg{
+  margin:0;
+  margin-bottom:30px;
+}
+
+.text-with-icons__item.icon-center .text-with-icons__icon-wrapper{
+  margin:0;
+}
+
+
+.text-with-icons__item.icon-center{
+  flex-direction: column;
+  text-align:center;
+}
+
+/*RIGHT ICON*/
+.text-with-icons__item.icon-right{
+  flex-direction: row-reverse;
+  text-align:right;
+}
+
+.text-with-icons__item.icon-right .text-with-icons__icon-wrapper{
+  margin:0.5em 0 0 30px;
+}
+
+@media screen and (max-width: 976px) {
+
+.text-with-icons{
+  padding-bottom: 30px;
+}
+
+.text-with-icons__item, .text-with-icons__item.icon-right{
+  flex-direction: column;
+  text-align:center;
+}
+
+.text-with-icons__item .text-with-icons__icon-wrapper svg, .text-with-icons__item.icon-right .text-with-icons__icon-wrapper svg{
+  margin:0;
+  margin-bottom:30px;
+}
+
+.text-with-icons__item .text-with-icons__icon-wrapper, .text-with-icons__item.icon-right .text-with-icons__icon-wrapper{
+  margin:0;
+}
+}
+
+@media screen and (max-width: 640px){
+.text-with-icons--stacked .text-with-icons__item:not(:last-child) {
+    margin-bottom: 60px;
+}
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Text with icons",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon_align",
+      "label": "Icon Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+                {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "stack_mobile",
+      "label": "Stack on mobile",
+      "default": false
+    },  
+
+        {
+          "type": "header",
+          "content": "Background"
+        },
+    {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#ffffff"
+        }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Icon / Image"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+             {
+              "value": "icon-shipping",
+              "label": "Shipping",
+              "group": "New Icons"
+            },
+            {
+              "value": "icon-bike",
+              "label": "Bike",
+              "group": "New Icons"
+            },
+            {
+              "value": "icon-warranty",
+              "label": "Warranty",
+              "group": "New Icons"
+            },
+              {
+              "value": "icon-stamp",
+              "label": "Stamp",
+              "group": "New Icons"
+            },
+            {
+              "value": "bi-gift-wrap",
+              "label": "Gift wrap",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-gift-box",
+              "label": "Gift box",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-heart",
+              "label": "Heart",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-ecology",
+              "label": "Ecology",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-plant",
+              "label": "Plant",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-shop",
+              "label": "Shop",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-shop-pin",
+              "label": "Shop with pin",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-alert",
+              "label": "Alert",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-chat",
+              "label": "Chat",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-comment",
+              "label": "Comment",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-customer-support",
+              "label": "Customer support",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-email",
+              "label": "Email",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-network",
+              "label": "Network",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-newsletter",
+              "label": "Newsletter",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-love",
+              "label": "Love",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-phone",
+              "label": "Phone",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-share",
+              "label": "Share",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-delivery",
+              "label": "Delivery",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-fast-delivery",
+              "label": "Fast delivery",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-returns",
+              "label": "Returns",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-time",
+              "label": "Time",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-secure-payment",
+              "label": "Secure payment",
+              "group": "Security"
+            },
+            {
+              "value": "bi-mobile-payment",
+              "label": "Mobile payment",
+              "group": "Security"
+            },
+            {
+              "value": "bi-computer-payment",
+              "label": "Computer payment",
+              "group": "Security"
+            },
+            {
+              "value": "bi-credit-card",
+              "label": "Credit card",
+              "group": "Security"
+            },
+            {
+              "value": "bi-shield",
+              "label": "Shield",
+              "group": "Security"
+            }
+          ],
+          "default": "bi-customer-support"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon",
+          "info": "60 x 60px .png with transparency recommended"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Color Icon",
+          "default": "#D2D2D2",
+          "info": "Currently only works for our new icons"
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Your title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Short content about your store</p>"
+        }
+      ]
+    }
+  ],
+    "presets": [
+    {
+      "category": "Image",
+      "name": "Text And Icons",
+      "settings": {}
+    }
+  ]
+} 
+
+{% endschema %}

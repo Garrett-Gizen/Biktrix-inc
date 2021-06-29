@@ -1,0 +1,129 @@
+{% assign product-title_img = product.title | downcase | replace: ' ', '-' %}
+{% assign product-size_bike = product-title_img | append: "_sizing-bike.jpg"  %}
+{% assign product-size_body = product-title_img | append: "_sizing-body.jpg"  %}
+{% assign product-size_overall = product-title_img | append: "_sizing-overall.jpg"  %}
+
+<section class="section section-accordion" data-section-id="{{ section.id }}" data-section-type="product"data-section-settings='{{ section_settings }}'>
+  <div class="container">
+    <div class="accordion">
+      <h1 class="accordion_title">Size & Fittings</h1>
+    </div>
+    <div class="accordion-body">
+      <div class="accordion-body_container">
+        <div class="product-img_sizing">
+          <img src="{{product-size_overall | asset_url}}">
+        </div>
+        <table class="product-table striped">
+          <tbody>
+          {% for key in product.metafields.biktrix.detailed_sizing %}
+          <tr>
+            <td>{{ key.id-number }}</td>
+            <td style="font-weight:600;">{{ key.title }}</td>
+            <td align="right">{{ key.measurement_one }}</td>
+            <td align="right">{{ key.measurement_two }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <style>
+
+    .accordion{
+    padding: 30px;
+    background-color: white;
+    border-radius: 3px;
+    }
+
+    .accordion.open{
+      border-bottom: 1px solid #eaeaea;
+    border-radius: 0px 0px 3px 3px!important;
+}
+
+    .accordion h1.accordion_title{
+    font-size: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 30px;
+    } 
+
+    
+    .accordion h1.accordion_title:after {
+      font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f106";
+    position: absolute;
+    right: 0;
+    font-size: 26px;
+    color: #616161;
+    transition: all 0.3s;
+    transform: rotate(0deg);
+    padding-right: 30px;
+}
+
+.accordion.open h1.accordion_title:after {
+    content: "\f106";
+    color: #B2B2B2;
+    transform: rotate(180deg);
+    padding-left:30px;
+    padding-right: 0px;
+}
+
+.accordion + .accordion-body .accordion-body_container{
+  background-color: white;
+    padding: 30px;
+}
+
+.product-img_sizing{
+  text-align: center;
+    padding: 60px;
+}
+
+
+.product-img_sizing img{
+  height:360px;
+}
+
+table.product-table{
+  table-layout: auto;
+  display: table;
+  font-size: 14px;
+}
+
+table.product-table, table.product-table tbody, table.product-table tr{
+  width: 100%;
+}
+
+table.striped tr:nth-child(even){
+  background-color:#f1f1f1;
+}
+
+table.product-table td{
+  padding: 15px 30px;
+}
+
+table.product-table td:first-child{
+  width:10px!important;
+}
+
+
+@media screen and (max-width: 1000px) {
+  .product-table .product-table_item{
+  width: calc(50% - 15px);
+}
+}
+
+
+@media screen and (max-width: 640px) {
+  .product-table .product-table_item{
+  width: calc(100% - 15px);
+}
+}
+
+  </style>

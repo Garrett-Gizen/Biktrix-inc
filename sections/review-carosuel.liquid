@@ -1,0 +1,280 @@
+<section class="section" data-section-id="{{ section.id }}" style="background-color:{{ section.settings.bg_color }}">
+  <div class="container">
+  
+  <div class="content content-full tc mbsep">
+            {% if section.settings.header_choice %}
+                      {%- if section.settings.title != blank -%}
+              <h1 class="primary center">{{ section.settings.title | escape }}</h1>
+              {%- endif -%}
+  
+  
+          {{ section.settings.content }}
+          </div>
+  
+                 {%- endif -%}
+    {% include 'judgeme_widgets', widget_type: 'judgeme_featured_carousel', concierge_install: false %}
+  
+    
+            {% if section.settings.button_choice %}
+              <a href="{{ section.settings.link }}" class="btn btn-c">{{ section.settings.button_text | escape }}</a>
+            {%- endif -%}
+    </div>
+  </section>
+  
+  <style>
+  
+  .jdgm-carousel-wrapper .jdgm-widget.jdgm-carousel {
+      width: 100%!important;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      position: relative;
+  }
+  
+  .jdgm-carousel--done .jdgm-carousel__item-container
+  .jdgm-carousel__item-wrapper {
+      width: 100%;
+      height: 100%;
+      white-space: nowrap;
+      padding: 10px 0;
+  }
+  
+  .jdgm-carousel-item {
+      position:relative;
+  display: inline-block;
+      height: 100%!important;
+      width: calc(33.33% - 30px);
+      vertical-align: middle;
+      font-size: 16px;
+      padding: 30px;
+      background-color: white;
+      border-radius: 3px;
+      box-shadow: 0 0 12px 0px #00000014;
+      margin-right: 34px;
+          overflow: visible;
+  }
+  
+  .jdgm-carousel-item:before {
+      font-family: "Font Awesome 5 Free";
+      content: '\f10e';
+      background-color: var(--primary-color);
+      color: white;
+      position: absolute;
+      top: -10px;
+      margin-right: 30px;
+      right: 0;
+      font-weight: 900;
+      font-size: 20px;
+      padding: 7px 11px;
+      border-radius: 3px;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel-item__review {
+      height: fit-content!important;
+  }
+  
+  .jdgm-carousel-item__review-rating {
+      font-size: 120%;
+          text-align: left;
+      margin-bottom: 30px;
+  }
+  .jdgm-star{
+    color:#FFD630;
+  }
+  
+  .jdgm-carousel-item__review-content{
+        text-align: left;
+      margin-bottom: 30px;
+  }
+  
+  .jdgm-carousel-item__reviewer-name-wrapper {
+      text-align: left;
+      margin: 6px 0;
+  }
+  
+  .jdgm-carousel-item__reviewer-name {
+      font-size: 16px;
+      opacity: 1;
+      line-height: 30px;
+      padding-bottom: 0;
+      font-weight: 700;
+      color: #616161;
+  }
+  
+  .jdgm-carousel-item__review-body.jdgm-line-clamp{
+  -webkit-line-clamp: 4!important;
+  }
+  .jdgm-carousel-wrapper .jdgm-carousel__arrows {
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      bottom: 50%;
+  }
+  .jdgm-carousel-wrapper .jdgm-carousel__left-arrow {
+      position: absolute;
+      left: -80px;
+      bottom: 100%;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__right-arrow {
+      position: absolute;
+      right: 80px;
+      bottom: 0px;
+  }
+  
+  
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__left-arrow, .jdgm-carousel-wrapper .jdgm-carousel__right-arrow {
+      float: none;
+      margin-left: 0;
+      margin-top: 0;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__left-arrow {
+      position: absolute;
+      left: -40px;
+      bottom: 0;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__right-arrow {
+      position: absolute;
+      right: -40px;
+      bottom: 0px;
+          margin-right: 0;
+  }
+  
+  .jdgm-carousel__right-arrow, .jdgm-carousel__left-arrow {
+      width: 18px;
+      height: 18px;
+      border-radius: 2px;
+          border-color: #e4e4e4;
+          transition: all 0.3s;
+  }
+  
+  .jdgm-carousel__right-arrow, .jdgm-carousel__left-arrow {
+      width: 18px;
+      height: 18px;
+      border-radius: 2px;
+          border-color: #e4e4e4;
+          transition: all 0.3s;
+  }
+  
+  .jdgm-carousel__right-arrow:hover, .jdgm-carousel__left-arrow:hover {
+    border-color: #222021;
+  }
+  
+  @media screen and (max-width: 999px) {
+  
+  .jdgm-carousel--done .jdgm-carousel__item-container .jdgm-carousel__item-wrapper {
+      padding: 10px;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__left-arrow {
+      position: absolute;
+      left: 80%;
+      bottom: 0;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__right-arrow {
+      position: absolute;
+      right: 12px;
+      bottom: 0px;
+      margin-right: 0;
+  }
+  
+  .jdgm-carousel-wrapper .jdgm-carousel__arrows {
+      height: 100%;
+      position: relative;
+      width: 100%;
+      bottom: -32px;
+      display: block;
+      margin-bottom: 30px!important;
+  }
+  
+  .jdgm-carousel-item {
+      display: inline-block;
+      height: 100%!important;
+      width: calc(100%);
+      vertical-align: middle;
+      font-size: 16px;
+      padding: 30px;
+      background-color: white;
+      border-radius: 3px;
+      box-shadow: 0 0 12px 0px #00000014;
+     margin-right: 40px;
+  }
+  
+  }
+  </style>
+  
+  {% schema %}
+  {
+    "name": "Review Carosuel",
+    "settings": [
+         {
+       "type": "header",
+            "content": "Header"
+          },
+                  {
+          "type": "checkbox",
+          "id": "header_choice",
+          "label": "Want A Header?",
+          "default": true
+        },
+           {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Your title"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Text",
+        "default": "<p>Use this text to share information about your brand with your customers.<br>Describe a product, share announcements, or welcome customers to your store.</p>"
+      },
+  
+          {
+            "type": "header",
+            "content": "Button"
+          },
+              {
+          "type": "checkbox",
+          "id": "button_choice",
+          "label": "Want A Button?",
+          "default": true
+        },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Read More"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+       "type": "header",
+            "content": "Background"
+      },
+       {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#ffffff"
+      }
+    ],
+    "presets": [
+      {
+        "category": "Review",
+        "name": "Review Carosuel",
+        "settings": {}
+      }
+    ]
+  }
+  {% endschema %}
+  
+  <script src="https://kit.fontawesome.com/9e530cc1ce.js" crossorigin="anonymous"></script>
+  

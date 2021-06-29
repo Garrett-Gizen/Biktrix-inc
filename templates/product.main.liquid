@@ -1,0 +1,38 @@
+{%- comment -%}Finds the product as a key to find thev proper section{%- endcomment -%}
+
+{% assign productkey = product.title | downcase | replace: " ", "-" }} %}
+
+{% section 'product-main-template' %}
+{% render 'product-navbar' %}
+<div class="container">
+  {% render 'shipping-information' %}
+  </div>
+
+
+{%- comment -%}Juggernaut Sections{%- endcomment -%}
+
+
+{% if productkey == "juggernaut-hub-duo-step-over" or productkey == "juggernaut-hub-duo-step-thru"%}
+{% section 'juggernaut-hub-duo_details' %}
+{% endif %}
+
+{% if productkey == "juggernaut-classic" %}
+{% section 'juggernaut-classic_details' %}
+{% endif %}
+
+    
+{%- comment -%}Adding the block IF the Reviews is selected{%- endcomment -%}
+<article id="product-reviews">
+{% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: false, product: product %}
+</article>
+
+
+{%- comment -%}Scrollspy{%- endcomment -%}
+
+  <script src="{{ 'vanillajs-scrollspy.min.js' | asset_url }}"></script>
+
+  <script>
+    const navbar = document.querySelector('#product-nav');
+    const scrollspy = new VanillaScrollspy(navbar);
+    scrollspy.init();
+  </script>

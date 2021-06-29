@@ -1,0 +1,754 @@
+{%- assign selected_variant = product.selected_or_first_available_variant -%}
+
+<div class="card {% if product.media.size > 0 %}card--collapsed{% endif %}">
+  {%- if section.settings.enable_image_zoom -%}
+    <div id="product-zoom-{{ section.id }}" class="product__zoom-wrapper"></div>
+  {%- endif -%}
+
+  <div class="card__section">
+    {% comment %}
+    ------------------------------------------------------------------------------
+    PRODUCT META
+    ------------------------------------------------------------------------------
+    {% endcomment %}
+
+      {%- capture product_labels -%}
+        {%- for tag in product.tags -%}
+          {%- if tag contains '__label:' -%}
+            <span class="product-label product-label--custom1">{{ tag | split: '__label:' | last }}</span>
+          {%- endif -%}
+
+          {%- if tag contains '__label1:' -%}
+            <span class="product-label product-label--custom1">{{ tag | split: '__label1:' | last }}</span>
+          {%- endif -%}
+
+          {%- if tag contains '__label2:' -%}
+            <span class="product-label product-label--custom2">{{ tag | split: '__label2:' | last }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if settings.show_discount -%}
+          {%- assign savings = 0 -%}
+
+          {%- if settings.discount_mode == 'percentage' -%}
+            {%- assign savings = selected_variant.compare_at_price | minus: selected_variant.price | times: 100.0 | divided_by: selected_variant.compare_at_price | round | append: '%' -%}
+          {%- else -%}
+            {%- capture savings -%}<span>{{ selected_variant.compare_at_price | minus: selected_variant.price | money }}</span>{%- endcapture -%}
+          {%- endif -%}
+
+          <span class="product-label product-label--on-sale" {% unless selected_variant.price < selected_variant.compare_at_price %}style="display: none"{% endunless %}>{{ 'collection.product.discount_html' | t: savings: savings }}</span>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- if product.tag.size != 0 -%}
+        <div class="product-meta__label-list">
+          {{- product_labels -}}
+        </div>
+      {%- endif -%}
+
+
+    <div class="product-meta">
+      {%- if template.name == 'product' and template != 'product.quick-view' -%}
+        <h1 class="product-meta__title heading h1">{{ product.title }}</h1>
+      {%- else -%}
+        <h3 class="product-meta__title heading h2">
+          <a href="{{ product.url }}">{{ product.title }}</a>
+        </h3>
+      {%- endif -%}
+
+      {%- if section.settings.show_reviews_badge -%}
+      {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product %}
+
+      {%- endif -%}
+
+    </div>
+
+    {%- if request.page_type == 'index' and section.settings.show_description and product.description != blank and section.settings.description_below_add_to_cart == false -%}
+      <div class="product-meta__description rte">
+        {{ product.description | remove: 'data-section-type="product"' }}
+      </div>
+    {%- endif -%}
+
+
+    {% comment %}
+    ------------------------------------------------------------------------------
+    PRODUCT FORM
+    ------------------------------------------------------------------------------
+    {% endcomment %}
+
+    {%- assign color_label = 'color,colour,couleur,cor,colore,farbe,색,色,カラー,färg,farve,szín,barva' | split: ',' -%}
+
+    {%- form 'product', product, class: 'product-form' -%}
+      {%- unless product.has_only_default_variant -%}
+        <div class="product-form__variants">
+          {%- for option in product.options_with_values -%}
+            {%- assign downcase_option = option.name | downcase -%}
+            {%- capture option_name -%}{{ section.id }}-{{ product.id }}-{{ forloop.index }}{%- endcapture -%}
+
+            {%- assign option_selector_type = 'select' -%}
+
+            {%- if section.settings.color_mode != 'block' and section.settings.color_mode != 'dropdown' and color_label contains downcase_option -%}
+              {%- comment -%}NOTE: even if the merchant is using the mode to display variant images, if ALL variant do not have an associated image, we fallback to color{%- endcomment -%}
+
+              {%- assign has_image_attached_to_all_variants = true -%}
+
+              {%- for variant in product.variants -%}
+                {%- unless variant.image -%}
+                  {%- assign has_image_attached_to_all_variants = false -%}
+                  {%- break -%}
+                {%- endunless -%}
+              {%- endfor -%}
+
+                {%- assign option_selector_type = 'color' -%}
+            {%- endif -%}
+
+            <div class="product-form__option" data-selector-type="{{ option_selector_type }}">
+              {%- case option_selector_type -%}
+                {%- when 'color' -%}
+
+                  <div class="color-swatch-list color-swatch-list--large">
+                    {%- for value in option.values -%}
+                      {%- assign downcased_value = value | downcase -%}
+                      {%- capture color_id -%}{{ option_name }}-{{ forloop.index }}{%- endcapture -%}
+
+                      {%- assign color_swatch_name = value | handle | append: '.png' -%}
+
+                      <div class="color-swatch {% if downcased_value == 'white' or downcased_value == 'blanc' %}color-swatch--white{% endif %}">
+                        <input class="color-swatch__radio product-form__single-selector" type="radio" name="{{ option_name }}" id="{{ color_id }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-position="{{ option.position }}">
+                        <label class="color-swatch__item lazyload" for="{{ color_id }}" style="background-image: url({{ color_swatch_name | asset_url }});" title="{{ value | escape }}">
+                          <span class="visually-hidden">{{ value }}</span>
+                          {%- render 'icon', icon: 'icon-disabled' -%}
+                        </label>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- when 'variant' -%}
+                  <span class="product-form__option-name text--strong">{{ option.name }} <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
+
+                  <div class="variant-swatch-list">
+                    {%- capture option_name -%}option{{ option.position }}{%- endcapture -%}
+
+                    {%- for value in option.values -%}
+                      {%- capture variant_swatch_id -%}{{ option_name }}-{{ forloop.index }}{%- endcapture -%}
+
+                      {%- for variant in product.variants -%}
+                        {%- if variant[option_name] == value and variant.image -%}
+                          <div class="variant-swatch">
+                            <input class="variant-swatch__radio product-form__single-selector" type="radio" name="{{ option_name }}" id="{{ variant_swatch_id }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-position="{{ option.position }}">
+
+                            <label class="variant-swatch__item" for="{{ variant_swatch_id }}" title="{{ value | escape }}">
+                              <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: variant.image.aspect_ratio }}%">
+                                <img src="{{ variant.image | img_url: '120x' }}" alt="{{ variant.image.alt | escape }}">
+                              </div>
+
+                              {% render 'icon', icon: 'cross-sold-out' %}
+                            </label>
+                          </div>
+
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endfor -%}
+                  </div>
+                {%- when 'block' -%}
+                  <span class="product-form__option-name text--strong">{{ option.name }} <span class="product-form__selected-value">{{ option.selected_value }}</span></span>
+
+                  <div class="block-swatch-list">
+                    {%- for value in option.values -%}
+                      {%- capture block_swatch_id -%}{{ option_name }}-{{ forloop.index }}{%- endcapture -%}
+
+                      <div class="block-swatch">
+                        <input class="block-swatch__radio product-form__single-selector" type="radio" name="{{ option_name }}" id="{{ block_swatch_id }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-position="{{ option.position }}">
+                        <label class="block-swatch__item" for="{{ block_swatch_id }}" title="{{ value | escape }}">
+                          <span class="block-swatch__item-text">{{ value }}</span>
+                        </label>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- when 'select' -%}
+                <div class="product-variant-title">
+
+                  <!--CREATES MODAL [Creates the variables. No JS needed.]-->
+                  {% assign modal_title_option = option.name %}
+                  {% assign modal_tite_sub = modal_title_option |  remove: "Select " | downcase  | replace: ' ', '-' %}
+                  {% assign modal_tite = "modal_" | append: modal_tite_sub | append: "_title"  %}
+                
+
+                  {% assign modal_content_page = modal_title_option |  remove: "Select " | replace: ' ', '-' %}
+
+                  <label id="product-variant-option" for="{{ option_name }}" class="product-form__option-name text--strong">{{ option.name }}</label> <span class="product-form__selected-value">{{ option.selected_value }}</span>
+                  <div class="modal_title">
+                    <button class="modal_link_btn" type="button">{{ 'modals.' | append: modal_tite  | t }}</button>
+                  </div>
+
+                  <!-- The Modal -->
+                  <div class="modal-new">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <span class="close">&times;</span>
+                      {{pages[modal_content_page].content}}
+                    </div>
+
+                  </div>
+
+                  </div>
+                  <div class="select-wrapper select-wrapper--primary">
+                    {%- render 'icon', icon: 'arrow-bottom' -%}
+
+                    <select class="product-form__single-selector" name="{{ option_name }}" id="{{ option_name }}" data-option-position="{{ option.position }}">
+                      {%- for value in option.values -%}
+                        <option value="{{ value | escape }}" {% if value == option.selected_value %}selected="selected"{% endif %}>{{ value }}</option>
+                      {%- endfor -%}
+                    </select>
+                  </div>
+
+              {%- endcase -%}
+            </div>
+          {%- endfor -%}
+
+          <div class="no-js product-form__option">
+            <label for="product-select-{{ product.id }}">{{ 'product.form.variant' | t }}</label>
+
+            <div class="select-wrapper select-wrapper--primary">
+              <select id="product-select-{{ product.id }}" name="id">
+                {%- for variant in product.variants -%}
+                  <option {% if variant == selected_variant %}selected="selected"{% endif %} {% unless variant.available %}disabled="disabled"{% endunless %} value="{{ variant.id }}" data-sku="{{ variant.sku }}">{{ variant.title }} - {{ variant.price | money }}</option>
+                {%- endfor -%}
+              </select>
+            </div>
+          </div>
+
+          
+<div class="bold_options" id="boldoptions" data-product-id="{{ product.id }}"></div>
+
+        </div>
+      {%- else -%}
+        <input type="hidden" name="id" data-sku="{{ selected_variant.sku }}" value="{{ selected_variant.id }}">
+      {%- endunless -%}
+
+      {% if product.type contains "Accessories" %}
+      {%- if section.settings.show_quantity_selector -%}
+
+
+        <div class="product-form__info-list quantity-form_added">
+          <div class="price-list">
+            {%- if selected_variant.compare_at_price > selected_variant.price -%}
+              <span class="price price--highlight bold_option_price_display">
+                <span class="visually-hidden">{{ 'product.general.sale_price' | t }}</span>
+                {{- selected_variant.price | money -}}
+              </span>
+
+              <span class="price price--compare price--highlight bold_option_price_display">
+                <span class="visually-hidden">{{ 'product.general.regular_price' | t }}</span>
+                {{- selected_variant.compare_at_price | money -}}
+              </span>
+            {%- else -%}
+              <span class="price price--highlight bold_option_price_display">
+                <span class="visually-hidden bold_option_price_display">{{ 'product.general.sale_price' | t }}</span>
+                {{- selected_variant.price | money -}}
+              </span>
+            {%- endif -%}
+          </div>
+          
+          
+        <div class="product-form__info-item product-form__info-item--quantity">
+          <div class="product-form__info-content">
+            <div class="quantity-selector quantity-selector--product">
+              <button type="button" class="quantity-selector__button" data-action="decrease-picker-quantity" aria-label="{{ 'cart.items.decrease_quantity' | t }}" title="{{ 'cart.items.decrease_quantity' | t }}">{% render 'icon', icon: 'minus' %}</button>
+              <input name="quantity" aria-label="{{ 'product.form.quantity' | t }}" class="quantity-selector__value" inputmode="numeric" value="1" size="3">
+              <button type="button" class="quantity-selector__button" data-action="increase-picker-quantity" aria-label="{{ 'cart.items.increase_quantity' | t }}" title="{{ 'cart.items.increase_quantity' | t }}">{% render 'icon', icon: 'plus' %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%- endif -%}
+
+
+      
+      <div class="product-form__payment-container btn-block">
+        {%- if product.template_suffix != 'contact' -%}
+          {%- if selected_variant.available -%}
+            {%- if product.template_suffix == 'pre-order' -%}
+              <button type="submit" class="product-form__add-button btn-block" data-action="add-to-cart">{{ 'product.form.pre_order' | t }}</button>
+            {%- else -%}
+              <button type="submit" class="product-form__add-button btn-block" data-action="add-to-cart">{{ 'product.form.add_to_cart' | t }}</button>
+            {%- endif -%}
+          {%- else -%}
+            <button type="submit" class="product-form__add-button btn-sold_out btn-block" disabled>{{ 'product.form.sold_out' | t }}</button>
+          {%- endif -%}
+
+          {%- if section.settings.show_payment_button and product.template_suffix != 'pre-order' -%}
+            {{ form | payment_button }}
+          {%- endif -%}
+        {%- else -%}
+          <a href="mailto:{{ shop.email }}" class="button button--primary btn-block">{{ 'product.form.contact_us' | t }}</a>
+        {%- endif -%}
+      </div>
+
+      {%- else -%}
+
+
+      <input type="hidden" name="quantity" value="1">
+
+      <div class="product-form__info-list">
+        <div class="price-list">
+          {%- if selected_variant.compare_at_price > selected_variant.price -%}
+            <span class="price price--highlight bold_option_price_display">
+              <span class="visually-hidden">{{ 'product.general.sale_price' | t }}</span>
+              {{- selected_variant.price | money -}}
+            </span>
+
+            <span class="price price--compare">
+              <span class="visually-hidden">{{ 'product.general.regular_price' | t }}</span>
+              {{- selected_variant.compare_at_price | money -}}
+            </span>
+          {%- else -%}
+            <span class="price ">
+              <span class="visually-hidden bold_option_price_display">{{ 'product.general.sale_price' | t }}</span>
+              {{- selected_variant.price | money -}}
+            </span>
+          {%- endif -%}
+        </div>
+
+
+        <div class="product-form__payment-container">
+          {%- if product.template_suffix != 'contact' -%}
+            {%- if selected_variant.available -%}
+              {%- if product.template_suffix == 'pre-order' -%}
+                <button type="submit" class="product-form__add-button" data-action="add-to-cart">{{ 'product.form.pre_order' | t }}</button>
+              {%- else -%}
+                <button type="submit" class="product-form__add-button" data-action="add-to-cart">{{ 'product.form.add_to_cart' | t }}</button>
+              {%- endif -%}
+            {%- else -%}
+              <button type="submit" class="product-form__add-button btn-sold_out" disabled>{{ 'product.form.sold_out' | t }}</button>
+            {%- endif -%}
+  
+            {%- if section.settings.show_payment_button and product.template_suffix != 'pre-order' -%}
+              {{ form | payment_button }}
+            {%- endif -%}
+          {%- else -%}
+            <a href="mailto:{{ shop.email }}" class="button button--primary">{{ 'product.form.contact_us' | t }}</a>
+        {%- endif -%}
+        </div>
+    </div>
+    
+    {%- endif -%}
+
+
+        {%- assign selected_variant = product.selected_or_first_available_variant -%}
+<nav class="product-nav-bar nav-bar" id="product-nav">
+  <div class="nav-bar__inner">
+    <div class="container">
+
+      <div class="product-nav-bar_content">
+        <ul class="nav-bar__linklist list--unstyled">
+          <li class="nav-bar__item">
+            <a class="active" href="#product-overview">Overview</a>
+          </li>
+          <li class="nav-bar__item">
+            <a href="#product-features">Features</a>
+          </li>
+          <li class="nav-bar__item">
+            <a href="#product-specs">Specifications</a>
+          </li>
+          <li class="nav-bar__item">
+            <a href="#product-reviews">Reviews</a>
+          </li>
+        </ul>
+
+        <div class="product-form__info-list">
+          <div class="price-list">
+            <span class="price price--highlight bold_option_price_display">
+              <span class="bold_option_price_display">{{- selected_variant.price | money -}}</span>
+
+            </span>
+          </div>
+          <div class="product-form__payment-container">
+            {%- if product.template_suffix != 'contact' -%}
+              {%- if selected_variant.available -%}
+                {%- if product.template_suffix == 'pre-order' -%}
+                  <button type="submit" class="product-form__add-button" data-action="add-to-cart">{{ 'product.form.pre_order' | t }}</button>
+                {%- else -%}
+                  <button type="submit" class="product-form__add-button" data-action="add-to-cart">{{ 'product.form.add_to_cart' | t }}</button>
+                {%- endif -%}
+              {%- else -%}
+                <button type="submit" class="product-form__add-button btn-sold_out" disabled>{{ 'product.form.sold_out' | t }}</button>
+              {%- endif -%}
+    
+              {%- if section.settings.show_payment_button and product.template_suffix != 'pre-order' -%}
+                {{ form | payment_button }}
+              {%- endif -%}
+            {%- else -%}
+              <a href="mailto:{{ shop.email }}" class="button button--primary">{{ 'product.form.contact_us' | t }}</a>
+            {%- endif -%}
+          </div>
+        {%- endform -%}
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+  <style>
+
+    .product-variant-title{
+    line-height:20px;
+    }
+
+    .product-form__option-name {
+    margin-bottom: 0px;
+    width: fit-content;
+    display: inline-flex;
+    }
+
+    .modal_link_btn{
+    color: #0C7FD6;
+    margin-bottom:15px;
+    font-size:14px;
+    }
+    .bold_option:not(:empty){
+    padding: 0;
+    margin-bottom:0px;
+    }
+
+    .bold_options{
+      margin-bottom:0;
+    }
+    
+    .bold_option.bold_option_radio{
+    margin-bottom:30px;
+    }
+
+
+    .bold_option.bold_option_radio:last-child{
+    margin-bottom:0px;
+    }
+
+
+    .bold_option_title.accordion{
+      padding: 0!important;
+    }
+
+    .bold_option_title, .accordion{
+      display: block;
+    width: 100%;
+    margin-bottom: 0px;
+    line-height: 20px;
+    color: var(--heading-color);
+    font-weight: var(--text-font-bolder-weight);    position: relative;
+    cursor: pointer;
+    }
+
+    .bold_option_title .bold_option_title-option_selected{
+      padding-left: 5px;
+    color: var(--text-color);
+    font-size: 15px;
+    font-weight: 500;
+    }
+
+.bold_option_title.accordion + .bold_option_element, .accordion + .accordion-body{
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s;
+  margin-left: 0;
+}
+
+.bold_option_title.accordion:before {
+    content: "Expand";
+    position: absolute;
+    right: 22px;
+    font-size: 14px;
+    color: #B2B2B2;
+    transition: all 0.3s;
+    font-weight: 100;
+    opacity:1;
+    background: white;
+    padding-left: 8px;
+}
+
+.bold_option_title.accordion.open:before {
+    position: absolute;
+    right: 22px;
+    font-size: 14px;
+    color: #B2B2B2;
+    transition: all 0.3s;
+    font-weight: 100;
+    opacity:0;
+    padding-left: 0px;
+}
+
+.bold_option_title.accordion:after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f106";
+    position: absolute;
+    right: 0;
+    font-size: 20px;
+    color: #616161;
+    transition: all 0.3s;
+    transform: rotate(0deg);
+    top:0;
+    background: white;
+    padding-left: 10px;
+}
+
+.bold_option_title.accordion.open:after {
+    content: "\f106";
+    color: #B2B2B2;
+    transform: rotate(180deg);
+    padding-right: 10px;
+    padding-left:0;
+}
+
+
+.bold_option_title .modal_link_btn{
+    color: #0C7FD6;
+    display:flex;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 100;
+    width:fit-content;
+    }
+
+    .bold_option_value{
+      margin-right:0;
+    }
+
+    .bold_option_value label {
+      display: flex;
+    position: relative;
+    border: 1px solid #E8E8E8;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    margin-right: 0;
+    cursor: pointer;
+    padding: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+    color: #707070;
+}
+
+.bold_option_value label.checked {
+  color:#222021;
+  border-color:#222021;
+}
+
+.bold_option_value_title,.bold_option_value_price{
+  width:100%;
+}
+
+.bold_option_value_price{
+  display: flex!important;
+  font-size:13px!important;
+    justify-content: flex-end;
+    width: 100%;
+    color:#B2B2B2;
+    font-weight: var(--text-font-weight);
+}
+
+.bold_option_value label.checked .bold_option_value_price{
+  color:#222021;
+}
+
+
+.bold_option_checkboxmulti .bold_option_element input[type=checkbox], .bold_option_radio .bold_option_element input[type=radio] {
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.product-form__info-list {
+    display: inline-flex;
+    width: 100%;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 30px 0;
+    position: sticky;
+    bottom: 0;
+    background: rgb(255 255 255 / 90%);
+    margin-top: 15px;
+    justify-content: space-between;
+}
+
+.product-form__info-list.quantity-form_added{
+margin-top:0;
+padding:0;
+}
+
+.price-list {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.price--highlight {
+    margin-right: 10px;
+    color: #222021;
+    font-size: 24px;
+}
+
+.product-form .price--compare {
+    font-size: 14px;
+    color: #707070;
+    top:0;
+}
+
+.product-form__payment-container {
+    display: flex;
+    justify-content: flex-end;
+    width:fit-content;
+    margin:0;
+    height:65px;
+}
+
+
+.product-nav-bar.nav-bar {
+    position: fixed;
+    top: -75px;
+    width: 100%;
+    display: block;
+    transition: all 0.3s;
+    z-index: 2;
+    box-shadow: rgb(0 0 0 / 10%) 0px 0 23px;
+    border-color: #E1E1E1;
+    background-color: white;
+  }
+
+  .product-nav-bar.nav-bar .nav-bar__inner .nav-bar__linklist{
+    display: flex;
+  }
+
+  .product-nav-bar.nav-bar .nav-bar__inner .nav-bar__linklist .nav-bar__item a {
+    transition: all 0.3s;
+  }
+
+  .product-nav-bar.nav-bar .nav-bar__inner .nav-bar__linklist .nav-bar__item a.active {
+    color: #222021;
+    background-color: #EFEFEF;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 3px;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: inherit;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .nav-bar__linklist {
+    width: auto;
+    font-size: 15px;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .nav-bar__linklist .nav-bar__item {
+    padding: 0;
+    margin-right: 30px;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .nav-bar__linklist .nav-bar__item:last-child {
+    margin-right: 0x;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content form {
+    margin: 0;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .product-form__info-list{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .product-form__info-list .price-list {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin-right:30px;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .product-form__info-list .price-list span {
+    font-size: 20px;
+    color: #222021;
+  }
+
+  .product-nav-bar.nav-bar .product-nav-bar_content .product-form__info-list .product-form__payment-container button {
+    height: 100%;
+    border-radius: 0;
+  }
+
+ .nav-bar__inner .product-form__info-list{
+   padding:0;
+   margin:0;
+ }
+
+
+  @media screen and (min-width: 640px){
+  .product-form__payment-container>* {
+    margin: 0px;
+  }
+}
+
+  </style>
+
+  
+  {% comment %}
+  ------------------------------------------------------------------------------
+  Product Data. This must be outputted for all products (including home page).
+
+  IMPORTANT: THIS CODE IS VITAL. DO NOT EDIT IT NOT REMOVE IT. MAKE SURE TO KEEP
+  THE EXACT SAME ATTRIBUTES.
+  ------------------------------------------------------------------------------
+  {% endcomment %}
+
+
+
+  <script type="application/json" data-product-json>
+    {
+      "product": {{ product | json }},
+      "options_with_values": {{ product.options_with_values | json }},
+      "selected_variant_id": {{ selected_variant.id }}
+      {%- if section.settings.show_inventory_quantity -%}
+        ,"inventories": {
+          {%- for variant in product.variants -%}
+            {%- if variant.available -%}
+              {%- if variant.inventory_management and variant.inventory_policy == 'deny' and section.settings.low_inventory_threshold > 0 -%}
+                {%- if variant.inventory_quantity <= section.settings.low_inventory_threshold -%}
+                  {%- capture inventory_message -%}{{ 'product.form.low_stock_with_quantity_count' | t: count: variant.inventory_quantity }}{%- endcapture -%}
+                {%- else -%}
+                  {%- capture inventory_message -%}{{ 'product.form.in_stock_with_quantity_count' | t: count: variant.inventory_quantity }}{%- endcapture -%}
+                {%- endif -%}
+              {%- else -%}
+                {%- if variant.inventory_policy == 'continue' and variant.inventory_quantity <= 0 and selected_variant.requires_shipping -%}
+                  {%- capture inventory_message -%}{{ 'product.form.oversell_stock' | t }}{%- endcapture -%}
+                {%- else %}
+                  {%- capture inventory_message -%}{{ 'product.form.in_stock' | t }}{%- endcapture -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- capture inventory_message -%}{{ 'product.form.sold_out' | t }}{%- endcapture -%}
+            {%- endif -%}
+
+            "{{ variant.id }}": {
+              "inventory_management": {{ variant.inventory_management | json }},
+              "inventory_policy": {{ variant.inventory_policy | json }},
+              "inventory_quantity": {{ variant.inventory_quantity | json }},
+              "inventory_message": {{ inventory_message | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        }
+      {%- endif -%}
+    }
+  </script>
+
+

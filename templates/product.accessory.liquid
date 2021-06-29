@@ -1,0 +1,13 @@
+{%- comment -%}Finds the product as a key to find thev proper section{%- endcomment -%}
+
+{% assign productkey = product.title | downcase | replace: " ", "-" }} %}
+
+{% section 'product-accessory-template' %}
+
+  <script src="{{ 'vanillajs-scrollspy.min.js' | asset_url }}"></script>
+
+  <script>
+    const navbar = document.querySelector('#product-nav');
+    const scrollspy = new VanillaScrollspy(navbar);
+    scrollspy.init();
+  </script>

@@ -1,0 +1,53 @@
+{%- comment -%}Finding out the block type.{%- endcomment -%}
+  
+  {% assign blockrender = null %}
+  {%- comment -%}Creates the variable for the Block Rendering (So we don't need to keep on doing a looping if
+  statement{%- endcomment -%}
+
+  {%- comment -%}Photo With Text{%- endcomment -%}
+  {% if block.type == "product_photo-with-text" %}
+  {% assign blockrender = "product_photo-with-text" %}
+  {%endif%}
+  
+  {%- comment -%}Video With Text{%- endcomment -%}
+  {%if block.type == "product_video-with-text" %}
+  {% assign blockrender = "product_video-with-text" %}
+  {%endif%}
+
+  {%- comment -%}Review Carosuel{%- endcomment -%}
+  {%if block.type == "product_review-carousel" %}
+  {% assign blockrender = "product_review-carousel" %}
+  {%endif%}
+
+    {%- comment -%}Main Features [3x Items]{%- endcomment -%}
+    {%if block.type == "product_main-features" %}
+    {% assign blockrender = "product_main-features" %}
+    {%endif%}
+
+   {%- comment -%}Sizing (Accordion){%- endcomment -%}
+   {%if block.type == "product_tech-sizing" %}
+   {% assign blockrender = "product_tech-sizing" %}
+   {%endif%}
+ 
+
+  {%- comment -%}Technical Specifications (Accordion){%- endcomment -%}
+  {%if block.type == "product_tech-specs" %}
+  {% assign blockrender = "product_tech-specs" %}
+  {%endif%}
+
+  {%- comment -%}Sizing (Accordion){%- endcomment -%}
+  {%if block.type == "product_tech-sizing" %}
+  {% assign blockrender = "product_tech-sizing" %}
+  {%endif%}
+
+    {%- comment -%}Detailed Gallery{%- endcomment -%}
+    {%if block.type == "product_detailed-gallery" %}
+    {% assign blockrender = "product_detailed-gallery" %}
+    {%endif%}
+  
+    
+    {%- comment -%}Additional Help{%- endcomment -%}
+    {%if block.type == "product_additional-help" %}
+    {% assign blockrender = "additional-help" %}
+    {%endif%}
+  

@@ -1,0 +1,119 @@
+<section class="section" data-section-id="{{ section.id }}" data-section-type="collection-list"
+    style="background-color:{{ block.settings.bg_color }}">
+    <div class="container">
+
+        <div class="gallery-list gallery-static">
+            {%- assign card_image_1 = block.settings.image_item_1 -%}
+            {% if card_image_1 %}
+            <div class="gallery_main-block">
+                <div class="gallery-list_main"
+                    style="{% if card_image_1 %}background-image:url('{{ card_image_1 | img_url: 'master' }}'); {% endif %}">
+
+                    <a data-fslightbox href="{{ card_image_1 | img_url: 'master' }}">
+                        <span></span>
+                    </a>
+
+                </div>
+                {% endif %}
+            </div>
+
+
+            <div class="gallery_side-listing">
+                {%- assign card_image_2 = block.settings.image_item_2 -%}
+                {% if card_image_2 %}
+                <a data-fslightbox href="{{ card_image_2 | img_url: 'master' }}" class="gallery-list_item"
+                    style="{% if card_image_2 %}background-image:url('{{ card_image_2 | img_url: 'master' }}'); {% endif %}">
+                </a>
+                {% endif %}
+
+
+
+                {%- assign card_image_3 = block.settings.image_item_3 -%}
+                {% if card_image_3 %}
+                <a data-fslightbox href="{{ card_image_3 | img_url: 'master' }}" class="gallery-list_item"
+                    style="{% if card_image_3 %}background-image:url('{{ card_image_3 | img_url: 'master' }}'); {% endif %}">
+                </a>
+                {% endif %}
+
+
+                {%- assign card_image_4 = block.settings.image_item_4 -%}
+                {% if card_image_4%}
+                <a data-fslightbox href="{{ card_image_4 | img_url: 'master' }}" class="gallery-list_item"
+                    style="{% if card_image_4 %}background-image:url('{{ card_image_4 | img_url: 'master' }}'); {% endif %}">
+                </a>
+                {% endif %}
+
+                {%- assign card_image_5 = block.settings.image_item_5-%}
+                {% if card_image_5 %}
+                <a data-fslightbox href="{{ card_image_5 | img_url: 'master' }}" class="gallery-list_item"
+                    style="{% if card_image_5 %}background-image:url('{{ card_image_5 | img_url: 'master' }}'); {% endif %}">
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+.gallery-list.gallery-static{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    grid-gap: 30px;
+}
+
+.gallery-list.gallery-static .gallery_main-block, .gallery-list.gallery-static .gallery_side-listing{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    grid-gap: 30px;
+    border-radius: 3px;
+    background-size: cover;
+    background-position: center;
+}
+
+.gallery-list.gallery-static .gallery_main-block .gallery-list_main{
+    width: 100%;
+    height: 100%;
+    position:relative;
+    border-radius: 3px;
+}
+
+.gallery-list.gallery-static .gallery_main-block .gallery-list_main a{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+
+.gallery-list.gallery-static .gallery_side-listing .gallery-list_item{
+    display: flex;
+    width: calc(50% - 30px);
+    height: 400px;
+    border-radius: 3px;
+    background-size: cover;
+    background-position: center;
+    position:relative;
+}
+
+
+.gallery-list.gallery-static .gallery_side-listing .gallery-list_item::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:transparent;
+  transition: all 0.3s;
+}
+
+.gallery-list.gallery-static .gallery_side-listing .gallery-list_item:hover::after, .gallery-list.gallery-static .gallery_main-block .gallery-list_main a:hover{
+  background-color:#080808ab;
+}
+
+
+    </style>

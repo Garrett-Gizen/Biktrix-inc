@@ -1,0 +1,90 @@
+<section class="section photo-text" data-section-id="{{ section.id }}" data-section-type="{{ section.id }}"
+  style="background-color:{{ block.settings.bg_color }}">
+  <div class="container">
+
+  
+    {%- capture image -%}
+    {%- if block.settings.image -%}
+    <div class="cover-image-panel" style="background-image:url('{{ block.settings.image | img_url: 'master' }}'); {%- if block.settings.bg_image_block -%} background-size:cover;{%- else -%}background-size:contain;{%- endif -%}"
+      ​​​​​​​>
+      {%- else -%}
+      <div class="cover-image-panel"
+        style="background-image:url('https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081')"
+        ​​​​​​​>
+        {%- endif -%}
+      </div>
+      {%- endcapture -%}
+
+      {%- capture text -%}
+      {%- if block.settings.img_position == 'left' -%}
+      <div class="content align-l">
+        {%- else -%}
+        <div class="content align-r">
+          {%- endif -%}
+          {%- if block.settings.title != blank -%}
+          <h1 class="primary">{{ block.settings.title | escape }}</h1>
+          {%- endif -%}
+
+          {{ block.settings.content }}
+
+          {% if block.settings.button_choice %}
+          <a href="{{ block.settings.link }}" class="btn">{{ block.settings.button_text | escape }}</a>
+          {%- endif -%}
+        </div>
+        {%- endcapture -%}
+
+
+        {%- if block.settings.img_position == 'left' -%}
+        <div class="photo-with-text">
+          {{ image }}
+          {{ text }}
+          {%- else -%}
+          <div class="photo-with-text right">
+            {{ text }}
+            {{ image }}
+            {%- endif -%}
+          </div>
+
+
+  </div>
+        
+</section>
+
+<style>
+.photo-with-text{
+  display:flex;
+  flex-wrap:wrap;
+  height:100%;
+}
+
+.section.photo-text .cover-image-panel,.section.photo-text .content{
+  width:50%;
+  padding-top:150px;
+  padding-bottom:150px;
+}
+
+
+.cover-image-panel{
+    background-position-x: center;
+    background-position-y: center;
+    border-radius:10px;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+@media screen and (max-width: 999px) {
+.cover-image-panel, .content{
+  width:100%;
+}
+.cover-image-panel{
+  height:300px;
+}
+
+.content, .content.text-right{
+  padding:0;
+      padding-top: 60px;
+}
+
+
+
+</style>

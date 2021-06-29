@@ -1,0 +1,290 @@
+<section class="section" data-section-id="text-with-icons"  data-section-type="text-with-icons"  style="background-color: {{section.settings.bg_color}}">
+  <div class="container">
+
+    <div class="content content-full tc mbsep">
+        {%- if section.settings.title_one != blank -%}
+        <h1 class="primary center">{{ section.settings.title_one}}</h1>
+        {%- endif -%}
+
+      <div class="text-with-icons article-container">
+        {% for block in section.blocks %}
+        {% if block.settings.feature_range == 1%}
+        <div class="article-card" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <div class="article-item {% if block.settings.feature_button-switch %}article-btn{% endif %}">
+          {%- if block.settings.feature_image -%}
+          <div class="cover-image-panel" style="background-image:url('{{ block.settings.feature_image | img_url: 'master' }}')">
+          {%- else -%}
+          <div class="cover-image-panel" style="background-image:url('https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081')">
+          {%- endif -%}
+          </div>
+            <div class="article-content">
+              <h2>{{block.settings.feature_title}}</h2>
+              {{block.settings.feature_desc}}
+            </div>
+        </div>
+        {%- if block.settings.feature_button-switch -%}
+        <a href="{{block.settings.feature_button-link}}" class="btn btn-block tl btn-grey caret">{{block.settings.feature_button-text}}</a>
+        {%- endif -%}
+      </div>
+      {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" data-section-id="text-with-icons"  data-section-type="text-with-icons"  style="background-color: {{section.settings.bg_color}}">
+  <div class="container">
+
+    <div class="content content-full tc mbsep">
+        {%- if section.settings.title_two != blank -%}
+        <h1 class="primary center">{{ section.settings.title_two}}</h1>
+        {%- endif -%}
+
+      <div class="text-with-icons article-container">
+        {% for block in section.blocks %}
+        {% if block.settings.feature_range == 2%}
+        <div class="article-card" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <div class="article-item {% if block.settings.feature_button-switch %}article-btn{% endif %}">
+          {%- if block.settings.feature_image -%}
+          <div class="cover-image-panel" style="background-image:url('{{ block.settings.feature_image | img_url: 'master' }}')">
+          {%- else -%}
+          <div class="cover-image-panel" style="background-image:url('https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081')">
+          {%- endif -%}
+          </div>
+            <div class="article-content">
+              <h2>{{block.settings.feature_title}}</h2>
+              {{block.settings.feature_desc}}
+            </div>
+        </div>
+        {%- if block.settings.feature_button-switch -%}
+        <a href="{{block.settings.feature_button-link}}" class="btn btn-block tl btn-grey caret">{{block.settings.feature_button-text}}</a>
+        {%- endif -%}
+      </div>
+      {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+  
+<section class="section" data-section-id="text-with-icons"  data-section-type="text-with-icons"  style="background-color: {{section.settings.bg_color}}">
+  <div class="container">
+
+    <div class="content content-full tc mbsep">
+        {%- if section.settings.title_three != blank -%}
+        <h1 class="primary center">{{ section.settings.title_three}}</h1>
+        {%- endif -%}
+
+      <div class="text-with-icons article-container">
+        {% for block in section.blocks %}
+        {% if block.settings.feature_range == 3%}
+        <div class="article-card" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <div class="article-item {% if block.settings.feature_button-switch %}article-btn{% endif %}">
+          {%- if block.settings.feature_image -%}
+          <div class="cover-image-panel" style="background-image:url('{{ block.settings.feature_image | img_url: 'master' }}')">
+          {%- else -%}
+          <div class="cover-image-panel" style="background-image:url('https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081')">
+          {%- endif -%}
+          </div>
+            <div class="article-content">
+              <h2>{{block.settings.feature_title}}</h2>
+              {{block.settings.feature_desc}}
+            </div>
+        </div>
+        {%- if block.settings.feature_button-switch -%}
+        <a href="{{block.settings.feature_button-link}}" class="btn btn-block tl btn-grey caret">{{block.settings.feature_button-text}}</a>
+        {%- endif -%}
+      </div>
+      {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<style>
+
+section .article-container{
+  display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin:0;
+    margin-bottom:100px;
+    padding: 0;
+}
+
+.article-card{
+  margin-right: 30px;
+  width: 100%;
+  max-width: calc(33.333% - 30px);
+}
+.article-card:last-child{
+  margin-right:0;
+}
+
+.article-item {
+  box-shadow: 0 0 12px 0px #0000000f;
+    border-radius: 3px;
+    background-color: white;
+    border-radius: 3px;
+}
+
+.article-item.article-btn{
+  margin-bottom:10px;
+}
+
+.article-item .cover-image-panel {
+    height: 350px;
+    border-radius: 3px;
+}
+
+.article-item .article-content{
+  padding: 30px;
+    text-align: left;
+}
+
+.article-item .article-content h2{
+  font-size: 24px;
+    font-weight: 200;
+    color: #222021;
+    margin-bottom: 10px;
+}
+
+.article-item .article-content p{
+  line-height: 30px;
+}
+
+
+@media screen and (max-width: 1000px){
+
+  .text-with-icons.article-container::after {
+    content: "flickity";
+    display: none;
+  }
+
+  section .article-container{
+    padding-bottom:30px;
+}
+
+
+  .article-card{
+    max-width:100%;
+  }
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Product Features",
+  "settings": [
+  {
+    "type": "header",
+    "content": "Titles"
+  },
+  {
+    "type": "text",
+    "id": "title_one",
+    "label": "Header One"
+  },
+  {
+    "type": "text",
+    "id": "title_two",
+    "label": "Header Two"
+  },
+  {
+    "type": "text",
+    "id": "title_three",
+    "label": "Header Three"
+  },
+  {
+    "type": "header",
+    "content": "Background"
+  },
+  {
+    "type": "color",
+    "id": "bg_color",
+    "label": "Background Color",
+    "default": "#ffffff"
+  }
+  ],
+    "blocks":[
+    {
+      "type": "select",
+      "name": "Feature",
+      "settings": 
+      [
+    {
+        "type": "header",
+        "content": "Image"
+    },
+      {
+        "type": "image_picker",
+        "id": "feature_image",
+        "label": "Feature Image"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "text",
+        "id": "feature_title",
+        "label": "Feature Title"
+      },
+      {
+        "type": "richtext",
+        "id": "feature_desc",
+        "label": "Feature Description"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "checkbox",
+        "id": "feature_button-switch",
+        "default": false,
+        "label": "Want A Button?"
+      },
+      {
+        "type": "text",
+        "id": "feature_button-text",
+        "label": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "feature_button-link",
+        "label": "Button Text"
+      },
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "range",
+        "id": "feature_range",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "label": "Section",
+        "default": 1
+    }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Features"
+    }
+  ]
+}
+{% endschema %}

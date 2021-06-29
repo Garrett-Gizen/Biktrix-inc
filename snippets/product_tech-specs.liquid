@@ -1,0 +1,110 @@
+<section class="section section-accordion" data-section-id="{{ section.id }}" data-section-type="product"data-section-settings='{{ section_settings }}'>
+  <div class="container">
+    <div class="accordion">
+      <h1 class="accordion_title">Technical Specifications</h1>
+    </div>
+    <div class="accordion-body">
+      <div class="accordion-body_container">
+        <div class="product-table">
+          {% for key in product.metafields.biktrix.detailed_specs %}
+          <div class="product-table_item">
+            <h6>{{ key.title }}</h6>
+            <p>{{ key.text }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <style>
+
+.section.section-accordion:first-child{
+  padding-top:60px;
+}
+
+    .section.section-accordion{
+      margin-bottom: 15px;
+      padding:0;
+    }
+
+    .accordion{
+    padding: 30px;
+    background-color: white;
+    border-radius: 3px;
+    }
+
+    .accordion.open{
+      border-bottom: 1px solid #eaeaea;
+    border-radius: 0px 0px 3px 3px!important;
+}
+
+    .accordion h1.accordion_title{
+    font-size: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 30px;
+    } 
+
+    
+    .accordion h1.accordion_title:after {
+      font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f106";
+    position: absolute;
+    right: 0;
+    font-size: 26px;
+    color: #616161;
+    transition: all 0.3s;
+    transform: rotate(0deg);
+    padding-right: 30px;
+}
+
+.accordion.open h1.accordion_title:after {
+    content: "\f106";
+    color: #B2B2B2;
+    transform: rotate(180deg);
+    padding-left:30px;
+    padding-right: 0px;
+}
+
+.accordion + .accordion-body .accordion-body_container{
+  background-color: white;
+    padding: 30px;
+}
+
+.product-table{
+  display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.product-table .product-table_item{
+  width: calc(33.333% - 15px);
+    margin-bottom: 30px;
+}
+
+.product-table .product-table_item h6{
+  margin-bottom: 0;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #222021;
+}
+
+@media screen and (max-width: 1000px) {
+  .product-table .product-table_item{
+  width: calc(50% - 15px);
+}
+}
+
+
+@media screen and (max-width: 640px) {
+  .product-table .product-table_item{
+  width: calc(100% - 15px);
+}
+}
+
+  </style>

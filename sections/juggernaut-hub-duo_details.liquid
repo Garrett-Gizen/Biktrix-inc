@@ -1,0 +1,780 @@
+<section class="section">
+
+
+  {%- comment -%}Adding the block IF the Overview is selected{%- endcomment -%}
+  <article id="product-overview">
+    {% for block in section.blocks %}
+    {% if block.settings.position_checked == "overview" %}
+
+    {% include "product_section-block-listing", type: 'block' %}
+    {% include blockrender, type: 'block' %}
+    
+    {% endif %}
+    {%endfor%}
+  </article>
+
+    {%- comment -%}Adding the block IF the Features is selected{%- endcomment -%}
+    <article id="product-features">
+      {% for block in section.blocks %}
+      {% if block.settings.position_checked == "features" %}
+  
+      {% include "product_section-block-listing", type: 'block' %}
+      {% include blockrender, type: 'block' %}
+      
+      {% endif %}
+      {%endfor%}
+    </article>
+
+    
+    {%- comment -%}Adding the block IF the Specifications is selected{%- endcomment -%}
+    <article id="product-specs">
+      {% for block in section.blocks %}
+      {% if block.settings.position_checked == "specifications" %}
+  
+      {% include "product_section-block-listing", type: 'block' %}
+      {% include blockrender, type: 'block' %}
+      {% endif %}
+      {%endfor%}
+    </article>
+
+        
+            
+        {%- comment -%}Adding the block IF the Default is selected{%- endcomment -%}
+    
+          {% for block in section.blocks %}
+          {% if block.settings.position_checked == "default" %}
+      
+          {% include "product_section-block-listing", type: 'block' %}
+          {% include blockrender, type: 'block' %}
+          
+          {% endif %}
+          {%endfor%}
+
+
+</section>
+
+
+
+{% schema %}
+{
+  "name": "Product Details",
+  "settings": 
+  [
+    {
+      "type": "header",
+      "content": "Content"
+    }
+  ],
+
+    "blocks": [
+    {
+      "type": "product_photo-with-text",
+      "name": "Photo With Text",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Article Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      },
+      {
+        "type": "header",
+        "content": "Image"
+      },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "1200 x 800px .jpg recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_image_block",
+      "label": "Make Image Cover?",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "img_position",
+      "label": "Image position",
+      "options": [
+    {
+          "value": "left",
+          "label": "Left"
+    },
+    {
+          "value": "right",
+          "label": "Right"
+    }
+    ],
+      "default": "left"
+    },
+    {
+          "type": "header",
+          "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your title"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers.<br>Describe a product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+          "type": "header",
+          "content": "Button"
+    },
+    {
+        "type": "checkbox",
+        "id": "button_choice",
+        "label": "Want A Button?",
+        "default": true
+   },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Read More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+     {
+    "type": "color",
+    "id": "bg_color",
+    "label": "Background Color",
+    "default": "#ffffff"
+    }
+    ]
+    },
+
+
+    {
+      "type": "product_video-with-text",
+      "name": "Video With Text",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      },
+      {
+        "type": "header",
+        "content": "Video Link"
+      },
+      {
+        "type": "video_url",
+        "id": "video_link",
+        "label": "Video URL",
+        "accept": ["youtube", "vimeo"]
+      },
+      {
+        "type": "select",
+        "id": "video_position",
+        "label": "Video Position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left"
+      },
+          {
+            "type": "header",
+            "content": "Text"
+          },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Your title"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Text",
+        "default": "<p>Use this text to share information about your brand with your customers.<br>Describe a product, share announcements, or welcome customers to your store.</p>"
+      },
+          {
+            "type": "header",
+            "content": "Button"
+          },
+        {
+          "type": "checkbox",
+          "id": "button_choice",
+          "label": "Want A Button?",
+          "default": true
+        },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Read More"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link",
+        "default": "/collections/all"
+      },
+      {
+        "type": "header",
+             "content": "Background"
+       },
+        {
+           "type": "color",
+           "id": "bg_color",
+           "label": "Background Color",
+           "default": "#ffffff"
+       }
+    ]
+    },
+
+    
+    {
+      "type": "product_review-carousel",
+      "name": "Review Carosuel",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      },
+      {
+        "type": "header",
+          "content": "Header"
+           },
+                   {
+           "type": "checkbox",
+           "id": "header_choice",
+           "label": "Want A Header?",
+           "default": true
+         },
+            {
+         "type": "text",
+         "id": "title",
+         "label": "Title",
+         "default": "Your title"
+       },
+       {
+         "type": "richtext",
+         "id": "content",
+         "label": "Text",
+         "default": "<p>Use this text to share information about your brand with your customers.<br>Describe a product, share announcements, or welcome customers to your store.</p>"
+       },
+   
+           {
+             "type": "header",
+             "content": "Button"
+           },
+               {
+           "type": "checkbox",
+           "id": "button_choice",
+           "label": "Want A Button?",
+           "default": true
+         },
+       {
+         "type": "text",
+         "id": "button_text",
+         "label": "Button text",
+         "default": "Read More"
+       },
+       {
+         "type": "url",
+         "id": "button_link",
+         "label": "Button link"
+       },
+       {
+        "type": "header",
+             "content": "Background"
+       },
+        {
+           "type": "color",
+           "id": "bg_color",
+           "label": "Background Color",
+           "default": "#ffffff"
+       }
+    ]
+    },
+
+
+    {
+      "type": "product_main-features",
+      "name": "Main Features [3x]",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      },
+      {
+        "type": "header",
+        "content": "Titles"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Header"
+      },
+      {
+        "type": "header",
+        "content": "Feature One"
+      },
+      {
+        "type": "image_picker",
+        "id": "feature_image_1",
+        "label": "Feature Image"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "text",
+        "id": "feature_title_1",
+        "label": "Feature Title"
+      },
+      {
+        "type": "richtext",
+        "id": "feature_desc_1",
+        "label": "Feature Description"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "checkbox",
+        "id": "feature_button-switch_1",
+        "default": false,
+        "label": "Want A Button?"
+      },
+      {
+        "type": "text",
+        "id": "feature_button-text_1",
+        "label": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "feature_button-link_1",
+        "label": "Button Text"
+      },
+      {
+        "type": "header",
+        "content": "Feature Two"
+    },
+      {
+        "type": "image_picker",
+        "id": "feature_image_2",
+        "label": "Feature Image"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "text",
+        "id": "feature_title_2",
+        "label": "Feature Title"
+      },
+      {
+        "type": "richtext",
+        "id": "feature_desc_2",
+        "label": "Feature Description"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "checkbox",
+        "id": "feature_button-switch_2",
+        "default": false,
+        "label": "Want A Button?"
+      },
+      {
+        "type": "text",
+        "id": "feature_button-text_2",
+        "label": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "feature_button-link_2",
+        "label": "Button Text"
+      },
+      {
+        "type": "header",
+        "content": "Feature Three"
+    },
+      {
+        "type": "image_picker",
+        "id": "feature_image_3",
+        "label": "Feature Image"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "text",
+        "id": "feature_title_3",
+        "label": "Feature Title"
+      },
+      {
+        "type": "richtext",
+        "id": "feature_desc_3",
+        "label": "Feature Description"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "checkbox",
+        "id": "feature_button-switch_3",
+        "default": false,
+        "label": "Want A Button?"
+      },
+      {
+        "type": "text",
+        "id": "feature_button-text_3",
+        "label": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "feature_button-link_3",
+        "label": "Button Text"
+      },
+      {
+        "type": "header",
+        "content": "Background"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color",
+        "default": "#ffffff"
+      }
+    ]
+    },
+    
+    {
+      "type": "product_tech-specs",
+      "name": "Tech Specs",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      }
+    ]
+    },
+
+        
+    {
+      "type": "product_tech-sizing",
+      "name": "Sizing",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      }
+    ]
+    },
+
+    {
+      "type": "product_detailed-gallery",
+      "name": "Gallery [5x]",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_item_1",
+        "label": "Image",
+        "info": "600 x 600px .jpg recommended"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_item_2",
+        "label": "Image",
+        "info": "600 x 600px .jpg recommended"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_item_3",
+        "label": "Image",
+        "info": "600 x 600px .jpg recommended"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_item_4",
+        "label": "Image",
+        "info": "600 x 600px .jpg recommended"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_item_5",
+        "label": "Image",
+        "info": "600 x 600px .jpg recommended"
+      }
+    ]
+    },
+
+    {
+      "type": "product_additional-help",
+      "name": "Additional Help",
+      "settings": [
+      {
+        "type": "header",
+        "content": "Placement"
+      },
+      {
+        "type": "select",
+        "id": "position_checked",
+        "label": "Position",
+        "options": [
+        {
+          "value": "default",
+          "label": "Default"
+       },
+      {
+            "value": "overview",
+            "label": "Overview"
+      },
+      {
+            "value": "features",
+            "label": "Features"
+      },
+      {
+        "value": "specifications",
+        "label": "Specifications"
+      },
+      {
+        "value": "reviews",
+        "label": "Reviews"
+      }
+      ],
+        "default": "default"
+      }
+    ]
+    }
+
+  ]
+}
+{% endschema %}

@@ -1,0 +1,791 @@
+{% assign line_item-maximum-input = 99 %}
+
+{%- capture section_settings -%}
+{
+  "showShippingEstimator": {% if cart.item_count == 0 %}false{% else %}{{ section.settings.show_shipping_estimator | json }}{% endif %}
+}
+{%- endcapture -%}
+
+<section class="section pt-0" data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}' data-item-count="{{ cart.item_count }}">
+  {%- if cart.item_count == 0 -%}
+    <div class="container">
+      <div class="empty-state">
+        <div class="empty-state__icon">
+          {%- render 'icon', icon: 'big-cart' -%}
+        </div>
+
+        <h1 class="primary">{{ 'cart.general.empty' | t }}</h1>
+
+        {%- if settings.cart_show_free_shipping_threshold -%}
+          {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+          {%- capture remaining_amount -%}<span>{{ cart.total_price | minus: threshold_in_cents | abs | money }}</span>{%- endcapture -%}
+          <p>{{ 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount }}</p>
+        {%- endif -%}
+
+        <div class="empty-state__button-container">
+          <a href="/collections/e-bikes" class="btn">{{ 'cart.general.empty_button' | t }}</a>
+        </div>
+      </div>
+    </div>
+  {%- else -%}
+
+    <div class="container cart-list_container">
+      <div class="cart-wrapper__inner">
+        <div class="cart-wrapper__inner-inner">
+            {%- comment -%}
+            --------------------------------------------------------------------------------------
+            LINE ITEMS
+            --------------------------------------------------------------------------------------
+            {%- endcomment -%}
+            {% assign cart_total = cart.item_count%}
+            <div class="cart-content">
+              
+      <header class="page__header">
+        <h1 class="primary">{{ 'cart.general.title' | t }}</h1>
+      </header>
+      {%- for line_item in cart.items -%}
+            <div class="article-item cart-item">
+              <a href="{{ routes.cart_change_url }}?quantity=0&line={{ forloop.index }}" data-action="decrease-quantity" data-quantity="0" data-line="{{ forloop.index }}" class="line-item__quantity-remove link">{%- render 'icon', icon: 'close-circle' -%}</a>
+                <table class="cart-item_table">
+                  <tbody>
+                    {%- assign gift_wrap_product = all_products[section.settings.gift_wrap_product] -%}
+                      <tr class="line-item line-item--stack">
+                        <td class="line-item__product-image">
+                          <div class="line-item__product-info-wrapper">
+                            <div class="line-item__image-wrapper">
+                              {%- comment -%}For vertical images we force to contain them on a square ratio to avoid growing too large{%- endcomment -%}
+
+                              {%- if line_item.image.aspect_ratio < 1 -%}
+                                <div class="aspect-ratio aspect-ratio--square">
+                                  <img src="{{ line_item.image | img_url: '180x' }}" alt="{{ line_item.image.alt | escape }}">
+                                </div>
+                              {%- else -%}
+                                <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: line_item.image.aspect_ratio }}%">
+                                  <img src="{{ line_item.image | img_url: '180x' }}" alt="{{ line_item.image.alt | escape }}">
+                                </div>
+                              {%- endif -%}
+                            </div>
+                          </td>
+                          <td class="line-item__product-info">
+                            <div class="line-item__meta">
+ 
+                              {%- if gift_wrap_product.handle == line_item.product.handle -%}
+                                <span class="line-item__title text--strong">{{ line_item.title }}</span>
+                              {%- else -%}
+                                <a href="{{ line_item.url }}" class="line-item__title">{{ line_item.product.title }}</a>
+                                {% unless line_item.product.has_only_default_variant %}
+                               <h6 class="line-item__variant">{{line_item.variant.title | replace:"/","|" }}</h6>
+
+                               {% endunless %}
+                              {%- endif -%}
+
+                              {%- unless line_item.properties == blank -%}
+                                <ul class="line-item__property-list" role="list">
+                                  {%- for property in line_item.properties -%}
+                                    {%- assign first_character_in_key = property.first | truncate: 1, '' -%}
+
+                                    {%- if property.last == blank or first_character_in_key == '_' -%}
+                                      {%- continue -%}
+                                    {%- endif -%}
+
+                                    <li class="line-item__property"><strong>{{ property.first | remove: "Choose"  }}:</strong> {{ property.last }}</li>
+                                  {%- endfor -%}
+                                </ul>
+                              {%- endunless -%}
+  
+                              <div class="line-item__quantity hidden-tablet-and-up">
+                                {%- comment -%}If the product has the tag "__gift", we remove the price{%- endcomment -%}
+
+                                {%- unless line_item.product.tags contains '__gift' -%}
+                                  <div class="quantity-selector">
+                                    {%- assign allow_to_add_more = true -%}
+
+                                    {%- if line_item.variant.inventory_management and line_item.variant.inventory_policy == 'deny' and line_item.quantity == line_item.variant.inventory_quantity -%}
+                                      {%- assign allow_to_add_more = false -%}
+                                    {%- endif -%}
+
+                                    <button type="button" class="quantity-selector__button" data-action="decrease-quantity" data-href="{{ routes.cart_change_url }}?quantity={{ line_item.quantity | minus: 1 }}&line={{ forloop.index }}" data-quantity="{{ line_item.quantity | minus: 1 }}" data-line="{{ forloop.index }}" aria-label="{{ 'cart.items.decrease_quantity' | t }}" title="{{ 'cart.items.decrease_quantity' | t }}">{% render 'icon', icon: 'minus' %}</button>
+                                    <input aria-label="{{ 'product.form.quantity' | t }}" class="quantity-selector__value" inputmode="numeric" data-current-value="{{ line_item.quantity }}" data-line="{{ forloop.index }}" value="{{ line_item.quantity }}" size="{{ line_item.quantity | append: '' | size | at_least: 2 }}">
+                                    <button type="button" class="quantity-selector__button" data-action="increase-quantity" data-href="{% if line_item.quantity != line_item-maximum-input %}{{ routes.cart_change_url }}?quantity={{ line_item.quantity | plus: 1 }}&line={{ forloop.index }}{% endif %}" data-quantity="{% if line_item.quantity != line_item-maximum-input %}{{ line_item.quantity | plus: 1 }}{% endif %}" data-line="{{ forloop.index }}" {% if allow_to_add_more %}aria-label="{{ 'cart.items.increase_quantity' | t }}" title="{{ 'cart.items.increase_quantity' | t }}"{% else %}disabled="disabled" aria-label="{{ 'cart.items.no_more_stock' | t }}" data-tooltip="{{ 'cart.items.no_more_stock' | t }}" data-tooltip-position="bottom-left"{% endif %}>{% render 'icon', icon: 'plus' %}</button>
+                                  </div>
+                                {%- else -%}
+                                  <span>{{ line_item.quantity }}</span>
+                                {% endunless -%}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="line-item__quantity">
+                          {%- comment -%}If the product has the tag "__gift", we remove the price{%- endcomment -%}
+
+                          {%- unless line_item.product.tags contains '__gift' -%}
+                            <div class="quantity-selector">
+                              {%- assign allow_to_add_more = true -%}
+
+                              {%- if line_item.variant.inventory_management and line_item.variant.inventory_policy == 'deny' and line_item.quantity == line_item.variant.inventory_quantity -%}
+                                {%- assign allow_to_add_more = false -%}
+                              {%- endif -%}
+
+                              <button type="button" class="quantity-selector__button" data-action="decrease-quantity" data-href="{{ routes.cart_change_url }}?quantity={{ line_item.quantity | minus: 1 }}&line={{ forloop.index }}" data-quantity="{{ line_item.quantity | minus: 1 }}" data-line="{{ forloop.index }}" aria-label="{{ 'cart.items.decrease_quantity' | t }}" title="{{ 'cart.items.decrease_quantity' | t }}">{% render 'icon', icon: 'minus' %}</button>
+                              <input aria-label="{{ 'product.form.quantity' | t }}" class="quantity-selector__value" inputmode="numeric" data-current-value="{{ line_item.quantity }}" data-line="{{ forloop.index }}" value="{{ line_item.quantity }}" size="{{ line_item.quantity | append: '' | size | at_least: 2 }}">
+                              <button type="button" class="quantity-selector__button" data-action="increase-quantity" data-href="{% if line_item.quantity != line_item-maximum-input %}{{ routes.cart_change_url }}?quantity={{ line_item.quantity | plus: 1 }}&line={{ forloop.index }}{% endif %}" data-quantity="{% if line_item.quantity != line_item-maximum-input %}{{ line_item.quantity | plus: 1 }}" data-line="{{ forloop.index }}{% endif %}" {% if allow_to_add_more %}aria-label="{{ 'cart.items.increase_quantity' | t }}" title="{{ 'cart.items.increase_quantity' | t }}"{% else %}disabled="disabled" aria-label="{{ 'cart.items.no_more_stock' | t }}" data-tooltip="{{ 'cart.items.no_more_stock' | t }}" data-tooltip-position="bottom-left"{% endif %}>{% render 'icon', icon: 'plus' %}</button>
+                            </div>
+                          {%- else -%}
+                            <span>{{ line_item.quantity }}</span>
+                          {%- endunless -%}
+                        </td>
+
+                        <td class="line-item__line-price table__cell--right hidden-phone">
+                          {%- if line_item.final_line_price == 0 -%}
+                            {{- 'cart.general.free' | t -}}
+                          {%- else -%}
+                          {% if  line_item.variant.compare_at_price != null%}
+                          <h5 class="line-item__price line-item__price--compare">{{ line_item.variant.compare_at_price | times:line_item.quantity | money }}</h5>
+                          {% endif %}
+                            <h3>{{ line_item.final_line_price | money }}</h3>
+                          {%- endif -%}
+                        </td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+              {%- endfor -%}
+            </div>
+
+
+
+            {%- comment -%}
+            --------------------------------------------------------------------------------------
+            RECAP
+            --------------------------------------------------------------------------------------
+            {%- endcomment -%}
+
+            {% assign currency_code = empty %}
+            {% for currency in shop.enabled_currencies %}
+            {%- assign currency_code = currency.iso_code -%}
+            {% endfor %}
+
+                <div class="card card-right_toolset cart-summary_container">
+                  <form class="cart-recap" method="post" action="{{ routes.cart_url }}" novalidate="novalidate" data-item-count="{{ cart.item_count }}">
+                  <div class="card__section">
+                    <div class="cart-summary_header">
+                    <h1 class="primary">ORDER SUMMARY</h1>
+                    <h6>{{cart_total}} Items</h6>
+                  </div>
+                    {%- if cart.cart_level_discount_applications != blank -%}
+                      {%- for discount_application in cart.cart_level_discount_applications -%}
+                        <div class="cart-recap__price-line cart-recap__price-line--highlight text--pull">
+                          <span class="cart-recap__price-line-label">{{ discount_application.title }}</span>
+                          <span class="cart-recap__price-line-price">-{{ discount_application.total_allocated_amount | money }}</span>
+                        </div>
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                    <div class="cart-recap__price-line text--pull">
+                      <span class="cart-recap__price-line-label">{{ 'cart.general.subtotal' | t | append:":" }}</span>
+                      <span class="cart-recap__price-line-price">{{ cart.total_price | money }} {{ currency_code }}</span>
+                    </div>
+                    
+
+                    {%- comment -%}
+                    To calculate the total discount, we take into account the Shopify Script (for Plus merchants), but we also add the compare at price as
+                    well as potential automatic discounts at cart level
+                    {%- endcomment -%}
+
+                    {%- assign total_discount = 0 -%}
+                    {%- for line_item in cart.items -%}
+                    
+                      {%- if line_item.final_line_price < line_item.original_line_price -%}
+                        {%- assign total_discount = total_discount | plus: line_item.total_discount -%}
+                      {%- elsif line_item.variant.compare_at_price > line_item.variant.price -%}
+                        {%- assign line_discount = line_item.variant.compare_at_price | minus: line_item.variant.price | times: line_item.quantity -%}
+                        {%- assign total_discount = total_discount | plus: line_discount -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    {%- for discount_application in cart.cart_level_discount_applications -%}
+                      {%- assign total_discount = total_discount | plus: discount_application.total_allocated_amount -%}
+                    {%- endfor -%}
+
+                    {%- if total_discount > 0 -%}
+                      {%- capture amount_saved -%}<span>{{ total_discount | money }}</span>{%- endcapture -%}
+                                    
+                    <div class="cart-recap__price-line cart-savings text--pull">
+                      <span class="cart-recap__price-line-label">{{ 'cart.general.total_savings' | t | append:":" }}</span>
+                      <span class="cart-recap__price-line-price savings">{{ amount_saved}} {{ currency_code }}</span>
+                    </div>
+                    {%- endif -%}
+
+                   <div class="cart-recap__notices rte">
+
+                        <input type="checkbox" class="input-checkbox" id="cart_agree"  name="termsconditions" required> 
+                        <label class="tos_label" for="cart_agree"> I Agree with all the Terms & Conditions that Biktrix provides. <a href="/pages/terms-of-service" target="_blank" class="tos_icon link primary-link ">More Details</a>.</label>
+    
+                    </div>
+
+                    <input type="hidden" name="attributes[collection_products_per_page]" value="">
+                    <input type="hidden" name="attributes[collection_layout]" value="">
+                    <button type="submit" name="checkout" class="btn btn-block cart-submit" style="margin-bottom:8px;">{{ 'cart.general.checkout' | t }}</button>
+                    <a href="/collections/e-bikes" class="btn btn-grey-empty btn-block ">{{ 'cart.general.continue' | t }}</a>
+
+                  </div>
+                </div>
+
+                {%- if section.settings.show_payment_icons -%}
+                  <div class="cart-recap__secure-payment">
+                    <p class="cart-recap__secure-payment-title">{% render 'icon', icon: 'lock-2' %} {{ 'cart.general.secure_payments' | t }}</p>
+
+                    <div class="cart-recap__secure-payment-list payment-list payment-list--centered">
+                      {% for type in shop.enabled_payment_types %}
+                        {{ type | payment_type_svg_tag: class: 'payment-list__item' }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                {%- endif -%}
+
+    
+          </div>
+        </form>
+            </div>
+        </div>
+      </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Those settings are only applicable when the cart contains at least one product."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_order_notes",
+      "label": "Enable order notes",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Gift wrap"
+    },
+    {
+      "type": "paragraph",
+      "content": "Gift wrap needs to be set up as a product. [Read more](https://support.maestrooo.com/article/190-cart-set-up-a-gift-wrap-product)"
+    },
+    {
+      "type": "product",
+      "id": "gift_wrap_product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "gift_wrap_text",
+      "label": "Text",
+      "default": "Do you want a gift wrap?"
+    },
+    {
+      "type": "text",
+      "id": "gift_wrap_button",
+      "label": "Button",
+      "default": "Add a gift wrap"
+    },
+    {
+      "type": "header",
+      "content": "Shipping estimator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_estimator",
+      "label": "Show shipping rates calculator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_estimator_default_country",
+      "label": "Default country",
+      "info": "If the customer is logged in, the country of their shipping address will be used.",
+      "default": "United States"
+    },
+    {
+      "type": "text",
+      "id": "trust_heading",
+      "label": "Heading",
+      "default": "Our guarantees"
+    },
+    {
+      "type": "header",
+      "content": "Upsell"
+    },
+    {
+      "type": "paragraph",
+      "content": "Show additional products to encourage customers to buy more."
+    },
+    {
+      "type": "text",
+      "id": "upsell_heading",
+      "label": "Heading",
+      "default": "Complete your cart"
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Collection",
+      "info": "Products already in cart or sold out will be hidden."
+    },
+    {
+      "type": "range",
+      "id": "upsell_products_count",
+      "label": "Products to show",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Trust text",
+      "type": "trust",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "bi-add-to-cart",
+              "label": "Add to cart",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-gift-wrap",
+              "label": "Gift wrap",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-gift-box",
+              "label": "Gift box",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-heart",
+              "label": "Heart",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-ecology",
+              "label": "Ecology",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-plant",
+              "label": "Plant",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-shop",
+              "label": "Shop",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-shop-pin",
+              "label": "Shop with pin",
+              "group": "Shop"
+            },
+            {
+              "value": "bi-alert",
+              "label": "Alert",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-chat",
+              "label": "Chat",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-comment",
+              "label": "Comment",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-customer-support",
+              "label": "Customer support",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-email",
+              "label": "Email",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-network",
+              "label": "Network",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-newsletter",
+              "label": "Newsletter",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-love",
+              "label": "Love",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-phone",
+              "label": "Phone",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-share",
+              "label": "Share",
+              "group": "Communication"
+            },
+            {
+              "value": "bi-delivery",
+              "label": "Delivery",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-fast-delivery",
+              "label": "Fast delivery",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-returns",
+              "label": "Returns",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-time",
+              "label": "Time",
+              "group": "Delivery"
+            },
+            {
+              "value": "bi-secure-payment",
+              "label": "Secure payment",
+              "group": "Security"
+            },
+            {
+              "value": "bi-mobile-payment",
+              "label": "Mobile payment",
+              "group": "Security"
+            },
+            {
+              "value": "bi-credit-card",
+              "label": "Credit card",
+              "group": "Security"
+            },
+            {
+              "value": "bi-shield",
+              "label": "Shield",
+              "group": "Security"
+            }
+          ],
+          "default": "bi-customer-support"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon",
+          "info": "60 x 60px .png with transparency recommended"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Your title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Short content about your store</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+
+.empty-state{
+  text-align: left;
+    margin: 180px auto;
+    width: fit-content;
+}
+
+.empty-state svg{
+  height: 90px;
+  fill: #B2B2B2;
+  margin-bottom: 15px;
+}
+
+.container.cart-list_container{
+  padding-right:0;
+}
+
+.cart-wrapper__inner .cart-wrapper__inner-inner{
+  display: inline-flex;
+  grid-gap: 60px;
+  width: 100%;
+}
+
+
+.page__header{
+    margin:0;
+  }
+
+  .page__header .primary{
+    padding: 60px 0;
+    margin: 0;
+  }
+
+
+  .cart-content{
+    width:60%;
+  }
+
+  .cart-recap{
+    position: relative!important;
+    top: 0!important;
+    right:0!important;
+    width:100%!important;
+  }
+
+  .card-right_toolset.card-right_toolset{
+    border: 0;
+    padding-left:30px;
+    padding-right: 80px;
+    border-radius: 0px 0px 0px 8px;
+    margin:0;
+  }
+
+  .cart-summary_container{
+    padding-top:150px;
+    width:40%;
+  }
+  
+  .cart-summary_container .card__section{
+    padding-top:0;
+  }
+
+  .cart-summary_header{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: baseline;
+  }
+
+  
+  .cart-summary_header h6{
+    width: auto;
+    margin-left: auto;
+    font-size: 16px;
+    color: #A1A1A1;
+  }
+
+  .line-item__title{
+    font-size: 18px;
+    margin-bottom: 0px;
+    color: #222021;
+    font-weight: 600;
+  }
+
+  .line-item__variant{
+    font-size: 16px;
+    line-height: 25px;
+    margin-bottom: 30px;
+    color: #707070;
+  }
+
+  .line-item__product-info-wrapper {
+    align-items: flex-start;
+}
+
+.line-item__image-wrapper {
+    width: 100px;
+    min-width: 90px;
+    margin-right: 30px;
+}
+
+.line-item__property-list, .line-item__options-value-list{
+  font-size: 13px;
+    line-height: 25px;
+    margin: 0;
+    list-style: none;
+}
+
+.line-item__property-list{
+  margin-top:15px;
+}
+
+.article-item.cart-item{
+  padding:30px;
+  margin-bottom:30px;
+  position:relative;
+}
+
+
+.article-item.cart-item:last-child{
+  margin-bottom:0px;
+}
+
+table.cart-item_table{
+  width:100%;
+}
+
+table.cart-item_table tr td{
+  padding: 0 30px;
+}
+
+table.cart-item_table tr td:last-child,table.cart-item_table tr td:first-child{
+  padding: 0px;
+}
+
+table.cart-item_table td.line-item__line-price{
+  text-align: right;
+}
+
+table.cart-item_table td.line-item__line-price h5{
+  color: #A1A1A1;
+    font-size: 15px;
+    font-weight: 200;
+    margin-bottom: 0;
+    text-decoration: line-through;
+    margin:0;
+}
+
+table.cart-item_table td.line-item__line-price h3{
+  font-size: 20px;
+    color: #616161;
+    font-weight: 400;
+}
+
+table.cart-item_table .quantity-selector__value{
+  width: 28px;
+    min-width: 0;
+    padding: 0;
+}
+
+
+table.cart-item_table .line-item__product-image{
+  display:flex;
+}
+
+table.cart-item_table .line-item__product-info{
+  padding:0;
+  width:45%;
+}
+
+.line-item__quantity-remove{
+  position: absolute;
+    top: 16px;
+    right: 18px;
+    margin: 0;
+}
+
+.line-item__quantity-remove svg{
+  width: 24px;
+    height: auto;
+    fill: #D1D1D1;
+    transition:fill 0.3s;
+}
+
+.line-item__quantity-remove svg:hover{
+    fill:  var(--primary-color);
+}
+
+.cart-recap__price-line{
+  align-items: center;
+}
+
+.cart-recap__price-line.cart-savings{
+  margin-bottom:30px;
+}
+
+
+.cart-recap__price-line .cart-recap__price-line-label{
+  font-size: 16px;
+    color: #616161;
+    font-weight: 500;
+}
+
+.cart-recap__price-line .cart-recap__price-line-price{
+  font-size: 22px;
+}
+
+
+.cart-recap__price-line .cart-recap__price-line-price.savings{
+color:red;
+font-size: 18px;
+}
+
+.btn.disabled::after{
+  content: "";
+    width: calc(100% - -4px);
+    height: calc(100% - -4px);
+    background-color: #ffffff63;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    border-radius: 3px;
+    cursor: not-allowed;
+}
+
+
+.btn.disabled:hover{
+  background-color:var(--primary-color)!important;
+  color:white;
+}
+
+.link.primary-link{
+  color:var(--primary-color)!important;
+  text-decoration: none!important;
+}
+
+.tos_label{
+  font-size: 14px;
+    line-height: 20px;
+    margin-top: 15px;
+}
+
+
+
+
+
+</style>
+
+<script>
+
+var termsofserviceinput, sumbitbtn
+
+termsofserviceinput = document.getElementById("cart_agree");
+sumbitbtn = document.getElementsByClassName("cart-submit");
+
+termsofserviceinput.addEventListener("change", function(){
+for(var i=0; i < sumbitbtn.length; i++){
+  if(termsofserviceinput.checked){
+    sumbitbtn[i].classList.remove("disabled");
+    sumbitbtn[i].disabled = false;
+  }
+  else{
+    sumbitbtn[i].classList.add("disabled");
+    sumbitbtn[i].disabled = true;
+  }
+}
+});
+
+</script>

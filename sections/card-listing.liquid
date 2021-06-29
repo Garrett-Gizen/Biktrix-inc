@@ -1,0 +1,292 @@
+<section class="section" data-section-id="{{ section.id }}" data-section-type="collection-list" style="background-color:{{ section.settings.bg_color }}">
+ <div class="container">
+
+        {%- assign rowheight = section.settings.row-num -%}
+        {%- assign rowheightpercentage = 100 | divided_by: rowheight -%}
+        <div class="card-list" style="grid-template-columns: repeat( {{rowheight}} , {{rowheightpercentage}}%);">
+          {%- for block in section.blocks -%}
+
+          {%- assign card_bg-image = block.settings.bg-image -%}
+          {%- assign card_bg-color = block.settings.card-bg_color -%}
+          {%- assign card_image = block.settings.card-image -%}
+
+    
+        <div class="card-list_item {% if block.settings.height_choice %}full-height{% endif %}" style="{% if block.settings.height_choice %}grid-row: span  {{ block.settings.col-height}} / auto;{% endif %} {% if card_bg-color %} background-color: {{ block.settings.card-bg_color}}   {% endif %};    {% if card_bg-image %}background-image:url('{{ card_bg-image | img_url: 'master' }}'); {% endif %}">
+        <div class="card-list_overlay" style="background-color: {{ block.settings.overlay-bg_color}} "></div>
+          <div class="card-list_image">
+          {% if card_image %}
+          <img src="{{ card_image | img_url: 'master' }}" alt="{{ card_image.alt | escape }}" {% if rowheight == 4 %} style="opacity: 0.4;width: 100%;right: 0;"  {% endif %}>
+          {% endif %}
+          </div>
+
+          {% if card_image %}
+          <div class="card-list_content content light" style="{% if rowheight == 4 %}width:100%; {% else %} width:60%; {% endif %} ">
+          {% else %}
+          <div class="card-list_content content light" style="width:100%;">
+          {% endif %}
+           <h3> {{ block.settings.title | escape }} </h3>
+          <p>{{ block.settings.content | escape }}</p>
+
+           {% if block.settings.button_choice %}
+           {% if block.settings.red-btn_choice %}
+            <a href="{{ block.settings.link }}" class="btn prim-dark btn-sm">{{ block.settings.button_text | escape }}</a>
+            {%- else -%}
+            <a href="{{ block.settings.link }}" class="btn btn-sm btn-white">{{ block.settings.button_text | escape }}</a>
+          {%- endif -%}
+           {%- endif -%}
+          </div>
+        </div>
+
+      {%- endfor -%}
+
+        </div>
+      </div>
+</section>
+
+
+<style>
+.card-list{
+    display: grid;
+    grid-template-rows: auto;
+    grid-gap: 30px;
+    margin-right: 45px;
+}
+
+.card-list_item{
+    display: flex;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    align-items: center;
+    width:100%;
+        background-size: cover;
+    background-position: center;
+}
+
+.card-list_overlay{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    opacity: 0.5;
+}
+
+.card-list_item.full-height{
+    grid-row: span 2 / auto;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.card-list_item.full-height .card-list_image{
+height: 100%;
+    padding: 30px;
+}
+
+
+.card-list_item.full-height .card-list_image img{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    right: 0;
+    object-fit: contain;
+    object-position: center;
+}
+
+
+.card-list_item.full-height .card-list_content{
+  width: 100%!important;
+}
+
+.card-list_image{
+    height: 100%;
+}
+
+.card-list_image img{
+    position: absolute;
+    height: 100%;
+    width: 70%;
+    right: -20%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.card-list_content{
+  padding:60px 30px;
+  z-index:1;
+}
+
+.card-list_content h3{
+  margin-bottom:15px;
+  text-transform:uppercase;
+}
+
+.card-list_content p{
+  line-height:30px;
+  font-size:15px;
+  margin-bottom:15px;
+}
+
+@media screen and (max-width: 1415px) {
+.card-list_image img{
+    height: 100%;
+    width: 100%;
+}
+}
+
+
+@media screen and (max-width: 1000px) {
+.card-list{
+    grid-template-columns: repeat(1 , 100%)!important;
+    margin-right: 0;
+}
+.card-list_image img{
+    height: 100%;
+    width: 70%;
+}
+}
+
+
+@media screen and (max-width: 640px) {
+.card-list_image img{
+  opacity: 0.4;
+  width:100%!important;
+}
+
+.card-list_content{
+width:100%!important;
+padding: 60px 30px;
+}
+}
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Card Listing",
+  "settings": [
+    {
+   "type": "range",
+    "id": "row-num",
+    "min": 1,
+    "max": 4,
+    "step": 1,
+    "label": "Row",
+    "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color",
+        "default": "#f8f8f8"
+    }
+  ],
+  
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "bg-image",
+          "label": "Background Image",
+          "info": "600 x 600px .jpg recommended"
+        },
+        {
+          "type": "color",
+          "id": "card-bg_color",
+          "label": "Background Color"
+        },
+                {
+          "type": "color",
+          "id": "overlay-bg_color",
+          "label": "Overlay Color"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "card-image",
+          "label": "Card Image",
+          "info": "100 x 100 .png recommended"
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+       {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Card"
+        },
+       {
+          "type": "textarea",
+          "id": "content",
+          "label": "Content",
+          "default": "Content goes here."
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+        "type": "checkbox",
+        "id": "button_choice",
+        "label": "Want A Button?",
+        "default": true
+      },
+              {
+        "type": "checkbox",
+        "id": "red-btn_choice",
+        "label": "Red Button",
+        "default": false
+      },
+
+       {
+          "type": "text",
+          "id": "button_text",
+          "label": "Text",
+          "default": "Read More"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+            {
+          "type": "header",
+          "content": "Additional Settings"
+        },
+                {
+        "type": "checkbox",
+        "id": "height_choice",
+        "label": "Full Height",
+        "default": false
+      },
+       {
+   "type": "range",
+    "id": "col-height",
+    "min": 1,
+    "max": 6,
+    "step": 1,
+    "label": "Column Height",
+    "default": 2
+    }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Main",
+      "name": "Card List"
+    }
+  ]
+}
+{% endschema %}

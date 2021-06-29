@@ -1,0 +1,133 @@
+<section class="section" data-section-id="{{ section.id }}" data-section-type="collection-list" style="background-color:{{ section.settings.bg_color }}">
+  <div class="container">
+    {%- assign rowheight = section.settings.row-num -%}
+    {%- assign rowheightpercentage = 100 | divided_by: rowheight -%}
+    <div class="gallery-list" style="grid-template-columns: repeat( {{rowheight}} , {{rowheightpercentage}}%);">
+      {%- for block in section.blocks -%}
+      {%- assign card_image = block.settings.image_item -%}
+        <a data-fslightbox href="{{ card_image | img_url: 'master' }}" style="{% if block.settings.height_choice %}grid-row: span  {{ block.settings.col-height}} / auto;{% endif %}">
+      {% if card_image %}
+      <div class="gallery-list_item {% if block.settings.height_choice %}full-height{% endif %}" style="{% if block.settings.height_choice %}height:100%;{% endif %} {% if card_image %}background-image:url('{{ card_image | img_url: 'master' }}'); {% endif %}">
+    </div>
+    {% endif %}
+    </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+
+.gallery-list{
+    display: grid;
+    grid-template-rows: auto;
+    grid-gap: 30px;
+    margin-right: 45px;
+}
+
+.gallery-list_item{
+  display: flex;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    align-items: center;
+    width:100%;
+    background-size: cover;
+    background-position: center;
+    height:400px;
+    position:relative;
+}
+
+
+.gallery-list_item.full-height{
+    grid-row: span 2 / auto;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.gallery-list .gallery-list_item::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:transparent;
+  transition: all 0.3s;
+}
+
+.gallery-list .gallery-list_item:hover::after{
+  background-color:#080808ab;
+}
+
+
+</style>
+
+
+  {% schema %}
+  {
+    "name": "Gallery",
+    "settings": [
+      {
+     "type": "range",
+      "id": "row-num",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Row",
+      "default": 3
+      },
+      {
+        "type": "header",
+        "content": "Background"
+      },
+      {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#f8f8f8"
+      }
+    ],
+    
+    "blocks": [
+      {
+        "type": "item",
+        "name": "Card",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image_item",
+            "label": "Image",
+            "info": "600 x 600px .jpg recommended"
+          },
+          {
+            "type": "header",
+            "content": "Additional Settings"
+          },
+                  {
+          "type": "checkbox",
+          "id": "height_choice",
+          "label": "Full Height",
+          "default": false
+        },
+         {
+     "type": "range",
+      "id": "col-height",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Column Height",
+      "default": 2
+      }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "category": "Image",
+        "name": "Gallery"
+      }
+    ]
+  }
+  {% endschema %}
+  

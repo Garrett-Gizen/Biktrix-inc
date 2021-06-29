@@ -1,0 +1,9 @@
+{% section 'cart-template' %}
+
+{%- if cart.item_count > 0 -%}
+<div class="container">
+  {% render "shipping-information" %}
+  </div>
+  {% section 'seperator-item' %}
+  {% section 'collection-scrolllist' %}
+{%- endif -%}

@@ -1,0 +1,885 @@
+
+{%- capture section_settings -%}
+{
+  "stackable": false,
+  "layout": "vertical"
+}
+{%- endcapture -%}
+
+<section class="section" data-section-id="featured-collection" data-section-type="featured-collection" data-section-settings='{{ section_settings }}'>
+  <div class="container">
+
+    <header>
+      <h1 class="primary">{{section.settings.title}}</h1>
+    </header>
+
+    {%- assign collection = collections[section.settings.collection] -%}
+    <div class="collection">
+
+      <div class="">
+      <div class="product-list product-list--collection product-list_flickity ">
+        {%- unless collection.empty? -%}
+        {%- for product in collection.products limit: section.settings.products_count -%}
+        {%- assign show_as_list = false -%}
+        {%- render 'product-item', product: product, list: show_as_list%}
+        {%- endfor -%}
+        {%- else -%}
+        {%- for i in (1..section.settings.products_count) -%}
+        {%- render 'product-item-placeholder'-%}
+        {%- endfor -%}
+        {%- endunless -%}
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Scroll Listing",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Improve Your Ride"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+
+  .collection_section-filter .layout{
+    display:block;
+    margin:0!important;
+  }
+  
+  .container.container-slim{
+    padding:0px 30px;
+  }
+  
+  .filter-section{
+    position:relative;
+    bottom:50px;
+  }
+  
+  .card{
+    border-radius: 3px;
+      background-color: white;
+      border-color: #F5F5F5;
+      box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+      word-break: break-word;
+  }
+  
+  .card.filter_card{
+    margin-bottom:0;
+    border:0;
+    border-radius: 3px 3px 0 0;
+  }
+  
+  .card.filter_card .card__section{
+    display: inline-flex;
+      width: 100%;
+      position: relative;
+      padding:30px;
+      padding-bottom: 0px;
+  }
+  
+    .card.filter_card .card__section .card_title{
+      padding: 0;
+      margin-bottom:0;
+      font-size:22px;
+      color:#222021;
+      font-weight: 600;
+      width: fit-content;
+    }
+  
+    .collection_dynamic-filtering{
+      margin-top:30px;
+    }
+    
+    .collection__filter-group-list{
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+  
+    .collection__clear-filter{
+      margin: 0;
+      position: absolute;
+      right: 30px;
+    }
+  
+    .collection__filter-group-list .collection__filter-group{
+      margin:0;
+      width: calc(100%/{{groups.size}});
+      padding: 0;
+      margin-bottom:30px;
+    }
+  
+    
+    .collection__filter-group-list .collection__filter-group .collection__filter-collapsible{
+      width: 100%;
+      background-color: white;
+      z-index: 2;
+      border-radius: 0 0 3px 3px;
+      box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+    }
+  
+    .collection__filter-group-list .collection__filter-group button.collection__filter-group-name{
+      padding: 30px;
+      position: relative;
+      color: #707070;
+      font-weight: 600;
+      transition: color 0.3s, background-color 0.3s;
+      background-color:white;
+    }
+  
+    .collection__filter-group .color-swatch-list{
+      display: flex;
+      flex-wrap: wrap;
+      grid-gap: 16px;
+      margin: 0;
+      padding: 0;
+  }
+    
+    .collection__filter-group .color-swatch-list .color-swatch{
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .collection__filter-group .color-swatch-list .color-swatch label{
+      margin-top: 8px;
+      text-transform: inherit;
+      font-size: 14px;
+    }
+  
+    .collection__filter-group .color-swatch-list .color-swatch .color-swatch__item{
+      width:25px;
+      height:25px;
+      border-radius: 50%;
+    }
+  
+    .collection__filter-group-list .collection__filter-group button.collection__filter-group-name:hover, 
+    .collection__filter-group-list .collection__filter-group button.collection__filter-group-name[aria-expanded=true]{
+      color: white;
+      background-color:#222021;
+    }
+  
+      
+    .collection__filter-group-list .collection__filter-group button.collection__filter-group-name:hover svg, 
+    .collection__filter-group-list .collection__filter-group button.collection__filter-group-name[aria-expanded=true] svg {
+      color: white;
+    }
+  
+  
+  
+    .collection__filter-group-list .collection__filter-group-name svg {
+      width: 14px;
+      height: 9px;
+      margin-left: 10px;
+      transition: transform .25s ease-in-out;
+      position: absolute;
+      right: 30px;
+      color: #616161;
+  }
+  
+  .collection__filter-group-list .collection__filter-group-name svg path {
+    stroke-width: 3;
+  }
+  
+  .collection__filter-checkbox-list,
+  .collection__filter-color-list{
+    padding:30px!important;
+    box-shadow: 0 0 12px rgb(0 0 0 / 5%)!important;
+  }
+  
+  
+  .collection__filter-checkbox-list li,
+  .collection__filter-color-list li{
+    margin-bottom:15px!important;
+  }
+  
+  .checkbox.rounded-checkbox{
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    border-color:#C9C9C9;
+  }
+  
+  .checkbox.rounded-checkbox.is-selected,.checkbox.rounded-checkbox:checked{
+    border-color:var(--primary-color);
+    border-width:5px;
+  }
+  
+  .collection__filter-checkbox-list li .checkbox-wrapper svg{
+  display:none!important;
+  }
+  
+  .collection__filter-checkbox-list li:last-child,
+  .collection__filter-color-list li:last-child{
+    margin-bottom:0px!important;
+  }
+  
+  .collection__filter-checkbox label{
+    margin-right:8px!important;
+  }
+  
+  .checkbox:checked{
+    background:white;
+  }
+  
+  .checkbox:focus{
+    box-shadow:0 0 0 1px var(--primary-color);
+    box-shadow:none;
+  }
+  
+  .collection__active-filters {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+  }
+  
+  
+  .collection__active-filters .collection__active-filter-item {
+      width: fit-content;
+      margin-right: 15px;
+      padding: 4px 8px;
+      background-color: #BABABA;
+      line-height: 0.7;
+      border-radius: 3px;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+  }
+  
+  .collection__active-filter-cross{
+      margin-right: 0;
+      background: none;
+      height: 20px;
+      width: 20px;
+      box-shadow: none;
+      margin-left: 5px;
+  }
+  
+  .collection__active-filter-cross svg {
+    position:relative;
+    top:0;
+    left:0;
+      width: 18px;
+      height: 18px;
+      stroke-width: 5px;
+      stroke: white;
+  }
+  
+  .collection__toolbar{
+    z-index:1;
+    margin-top:0!important;
+  }
+  
+  .collection_dynamic-filtering{
+    display:flex;
+    align-items: center;
+  }
+  
+  .collection__toolbar-item{
+    height: 100%;
+  }
+  
+  .collection__toolbar-item .collection__showing-count{
+    color:#9F9F9F;
+  }
+  
+  .collection__toolbar-item.collection__toolbar-item--sort{
+    margin-left: auto;
+    margin-right: 30px;
+  }
+  
+  .collection__toolbar-item .value-picker-button {
+      margin-left: 0;
+      border: 1px solid #E8E8E8;
+      background-color: white;
+      border-radius: 3px;
+      padding: 7px 14px;
+      width: 220px;
+      text-align: left;
+      position: relative;
+  }
+  
+  .value-picker-wrapper{
+    position:relative;
+  }
+  
+  .value-picker-button svg {
+      width: 12px;
+      height: 12px;
+      transition: transform .2s ease-in-out;
+      position: absolute;
+      right: 14px;
+      bottom: calc(50% - 5px);
+  }
+  
+  .value-picker-wrapper .value-picker{
+    position: absolute;
+      left: 0;
+      top: calc(100% - 1px);
+      bottom: 0px;
+      right: 0;
+      width: 100%;
+      height: 0;
+      transition: all 0.3s;
+      opacity: 1;
+      transform:none;
+      box-shadow:none;
+  }
+  
+  .value-picker-wrapper .value-picker[aria-hidden=false]{
+  height: max-content;
+  }
+  
+  .value-picker-wrapper .value-picker__inner{
+    position: relative;
+      width: auto;
+      transform: none!important;
+      transition: none;
+      border-radius: 0 0 3px 3px;
+      height: auto;
+      border: 1px solid #E8E8E8;
+  }
+  
+  .value-picker-wrapper .value-picker__inner .value-picker__choice-list{
+    padding:0;
+  }
+  
+  
+  .value-picker__choice-item {
+      display: block;
+      transition: color .15s ease-in-out,background .15s ease-in-out;
+      padding: 7px 20px;
+  }
+  
+  .value-picker__choice-item.is-selected, .value-picker__choice-item:hover {
+      background: #222021;
+      color: white;
+      font-weight: 600;
+  }
+  
+  
+  
+  .product-list{
+    margin:30px 0;
+    padding:0;
+    grid-gap:30px;
+    background: none;
+  }
+  
+  
+  .product-item{
+    padding: 0;
+      width: calc(25% - 23px);
+      height: auto;
+      overflow: hidden;
+      margin-bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+  
+  
+  .product-item.bike-product.product-item--list{
+    
+    padding: 0;
+      height: auto;
+      overflow: visible;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+  
+  }
+  
+  .product-item.bike-product .priduct-item_details{
+    padding:30px;
+  }
+  
+  
+  .product-item.bike-product.product-item--list .priduct-item_details{
+    display: inline-flex;
+      width: 100%;
+      flex-wrap: wrap;
+  }
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__image-wrapper{
+    width:250px;
+    margin-right:60px;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__image-wrapper .aspect-ratio--square{
+    height:100%!important;
+  }
+  
+  .product-item__label-list{
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      z-index: 2;
+      font-size: 0;
+  }
+  
+  .product-item__label-list .product-label{
+  border-radius:3px;
+  }
+  
+  .product-item.bike-product .priduct-item_details .product-item__image-wrapper{
+    margin-bottom:0;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__info{
+    display: flex;
+      margin: 0;
+      align-items: center;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__info-inner{
+    width: 100%;
+  }
+  
+  .product-item.bike-product .priduct-item_details .product-item__info-inner .product-item__title{
+    margin-bottom:30px;
+  }
+  
+  .product-item.bike-product .priduct-item_details .product-item__info-inner .product-item__title h3{
+    font-weight: 600;
+      color: #222021;
+      font-size: 22px;
+  }
+  
+  .product-item.bike-product .product-item__swatch-list{
+    margin:0!important;
+    margin-bottom: 15px!important;
+    overflow: visible!important;
+    white-space: normal;
+  }
+  
+  .product-item.bike-product .product-item__swatch-list .color-swatch-list{
+    margin:0!important;
+    padding:0!important;
+  }
+  
+  .product-item.bike-product .color-swatch-list .color-swatch{
+    position: relative;
+      display: inline-block;
+      margin: 6px 0px!important;
+      border-radius: 100%!important;
+      margin-right: 15px!important;
+  }
+  
+  .product-item.bike-product .color-swatch-list .color-swatch .color-swatch__item{
+    position: relative;
+      display: block;
+      width: 25px!important;
+      height: 25px!important;
+      cursor: pointer;
+      background-size: cover;
+      border-radius: 100%;
+  }
+  
+  .product-item.bike-product .product-item__price-list {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      display: inline-flex;
+      align-items: center;
+  }
+  
+  .product-item.bike-product .price--highlight,  .product-item.bike-product .price{
+      margin-right: 10px;
+      font-size: 22px!important;
+      color: #616161;
+      font-weight: 500;
+      margin-top: 0px;
+      margin-bottom: 0px;
+  
+  }
+  
+  .product-item.bike-product .product-item .price--compare {
+      font-size: 16px;
+      color: #A1A1A1;
+  }
+  
+  .product-item.bike-product .product-item_features{
+    width: 100%;
+      display: inline-flex;
+      padding-top: 30px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      border-top: 1px solid #E8E8E8;
+      justify-content: space-between;
+  }
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list{
+    display: inline-flex;
+      align-items: center;
+      height: fit-content;
+      margin-right: 15px;
+  }
+  
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list:last-child{
+      margin-right: 0px;
+  }
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list p{
+    font-size:14px;
+    color:#222021;
+  }
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list svg{
+    height: 20px;
+      fill: #616161;
+      margin-right: 8px;
+  }
+  
+  .product-item.bike-product.product-item--list .product-item_features{
+    width: 100%;
+      padding-top: 30px;
+      border-top: 1px solid #E8E8E8;
+      justify-content: flex-start;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 30px;
+  }
+  
+  .product-item.bike-product.product-item--list .button-group, .product-item.bike-product .btn-group_list{
+    display:none;
+  }
+  
+  .product-item.bike-product.product-item--list .btn-group_list{
+    display:block;
+  }
+  
+  .scrollable{
+    overflow: hidden;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .product-list_flickity::after {
+    content: "flickity";
+    display: none;
+  }
+
+  .product-list .flickity-slider{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+  }
+  
+
+  .product-list .flickity-slider .product-item {
+    left:0!important;
+    position: initial !important;
+    margin-right:30px;
+    }
+
+    .product-list .flickity-slider .product-item:last-child {
+    margin-right:0px;
+    }
+
+  @media screen and (max-width: 1000px) {
+  .product-item.bike-product{
+    width: calc(50% - 15px);
+  }
+  
+  .collection__filter-group-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+  }
+  
+  .collection__filter-group-list .collection__filter-group {
+      padding: 0;
+      margin-bottom: 0;
+      background: white;
+      border-width:0px;
+      width: calc(100%);
+  }
+  
+  .collection__filter-group-list .collection__filter-group button.collection__filter-group-name {
+    background-color: white;
+      padding: 30px 0;
+      border-bottom: 1px solid #E8E8E8;
+      width: calc(100% - 60px);
+      margin: auto;
+      transition: none;
+  }
+  
+  .collection__filter-group-list .collection__filter-group:last-child button.collection__filter-group-name, .collection__filter-group-list .collection__filter-group:last-child .collection__filter-collapsible {
+      border-width:0;
+  }
+  
+  .collection__filter-group-list .collection__filter-group button.collection__filter-group-name:hover, 
+  .collection__filter-group-list .collection__filter-group button.collection__filter-group-name[aria-expanded=true] {
+      padding: 30px;
+      width: calc(100% - 0px);
+      margin: auto;
+      border-bottom:0;
+  }
+  
+  
+  .collection__filter-group-list .collection__filter-group-name svg{
+    right:0;
+  }
+  
+  
+  .collection__filter-group-list .collection__filter-group button.collection__filter-group-name:hover svg,
+  .collection__filter-group-list .collection__filter-group button.collection__filter-group-name[aria-expanded=true] svg{
+    right:30px;
+  }
+  
+  .collection__filter-group-list .collection__filter-group .collection__filter-collapsible{
+    border-bottom: 1px solid #e8e8e8;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__info{
+    display:block;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__info-inner{
+    margin-bottom: 30px;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__image-wrapper{
+    width:175px;
+  }
+  
+  .product-item.bike-product.product-item--list .btn-group_list .btn{
+    width:100%;
+  }
+  }
+  
+  
+  @media screen and (max-width: 640px) {
+  .product-item.bike-product{
+    width: calc(100% - 0px);
+  }
+  .product-item__label-list{
+      left: 30px!important;
+  }
+  
+  .collection_dynamic-filtering {
+      flex-wrap: wrap;
+  }
+  
+  .value-picker-wrapper .value-picker {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: auto;
+      height: auto;
+      z-index: 5;
+      font-size: calc(var(--base-text-font-size) - (var(--default-text-font-size) - 16px));
+      transition: all 0.3s;
+      top:unset!important;
+  }
+  
+  .value-picker-wrapper .value-picker::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0;
+      transition: opacity .35s ease-in-out;
+      background: #000;
+  }
+  
+  .value-picker-wrapper .value-picker[aria-hidden=false]::before {
+      opacity: .4;
+  }
+  
+  .collection__toolbar-item.collection__toolbar-item--count{
+    display: flex;
+      width: 100%;
+      margin-bottom: 15px;
+  }
+  
+  .collection__toolbar-item.collection__toolbar-item--sort{
+    width: 50%;
+  }
+  
+  .value-picker-wrapper{
+    width: 100%;
+  }
+  
+  .collection__toolbar-item.collection__toolbar-item--layout{
+    width: calc(50% - 30px);
+      justify-content: flex-end;
+  }
+  
+  
+  .product-list{
+    margin:30px 0;
+    padding:0;
+    grid-gap:30px;
+    background: none;
+  }
+  
+  
+  .product-item.bike-product.product-item--list{
+    padding: 0;
+      width: calc(33.333% - 20px);
+      height: auto;
+      overflow: hidden;
+      margin-bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+  
+  
+  .product-item.bike-product.product-item--list .priduct-item_details{
+    padding:30px;
+    display:block;
+  }
+  
+  .product-item__label-list{
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      z-index: 2;
+      font-size: 0;
+  }
+  
+  .product-item__label-list .product-label{
+  border-radius:3px;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__image-wrapper{
+    margin-bottom:0;
+    height: 250px;
+  }
+  
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__info-inner .product-item__title{
+    margin-bottom:30px;
+  }
+  
+  .product-item.bike-product.product-item--list .priduct-item_details .product-item__info-inner .product-item__title h3{
+    font-weight: 600;
+      color: #222021;
+      font-size: 22px;
+  }
+  
+  .product-item.bike-product.product-item--list .product-item__swatch-list{
+    margin:0!important;
+    margin-bottom: 15px!important;
+    overflow: visible!important;
+    white-space: normal;
+  }
+  
+  .product-item.bike-product .product-item__swatch-list .color-swatch-list{
+    margin:0!important;
+    padding:0!important;
+  }
+  
+  .product-item.bike-product .color-swatch-list .color-swatch{
+    position: relative;
+      display: inline-block;
+      margin: 6px 0px!important;
+      border-radius: 100%!important;
+      margin-right: 15px!important;
+  }
+  
+  .product-item.bike-product .color-swatch-list .color-swatch .color-swatch__item{
+    position: relative;
+      display: block;
+      width: 25px!important;
+      height: 25px!important;
+      cursor: pointer;
+      background-size: cover;
+      border-radius: 100%;
+  }
+  
+  .product-item.bike-product .product-item__price-list {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      display: inline-flex;
+      align-items: center;
+  }
+  
+  .product-item.bike-product .price--highlight,  .product-item.bike-product .price{
+      margin-right: 10px;
+      font-size: 22px!important;
+      color: #616161;
+      font-weight: 500;
+      margin-top: 0px;
+      margin-bottom: 0px;
+  
+  }
+  
+  .product-item.bike-product .product-item .price--compare {
+      font-size: 16px;
+      color: #A1A1A1;
+  }
+  
+  .product-item.bike-product.product-item--list .product-item_features{
+    width: 100%;
+      display: inline-flex;
+      padding-top: 30px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      border-top: 1px solid #E8E8E8;
+      justify-content: space-between;
+  }
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list{
+    display: inline-flex;
+      align-items: center;
+      height: fit-content;
+      margin-right: 15px;
+  }
+  
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list:last-child{
+      margin-right: 0px;
+  }
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list p{
+    font-size:14px;
+    color:#222021;
+  }
+  
+  .product-item.bike-product .product-item_features .product-item_features-card-list svg{
+    height: 20px;
+      fill: #616161;
+      margin-right: 8px;
+  }
+  
+  
+  .product-item.bike-product .btn-group_list, .product-item.bike-product.product-item--list .btn-group_list{
+    display:none;
+  }
+  
+  .product-item.bike-product.product-item--list .button-group{
+    display:block;
+  }
+  }
+  
+  </style>

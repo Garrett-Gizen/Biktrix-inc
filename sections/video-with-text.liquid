@@ -1,0 +1,217 @@
+<section class="section video" data-section-id="{{ section.id }}" data-section-type="{{ section.id }}" style="background-color:{{ section.settings.bg_color }}">
+
+  {% for block in section.blocks %}
+
+  <div class="section-video_item">
+
+  {%- capture video_link -%}
+  {%- if block.settings.video_link -%}
+  {%- assign video_yt_link = "https://www.youtube.com/embed/" | append: block.settings.video_link.id -%}
+  <iframe width="100%" height="100%" frameborder="0" allowfullscreen src={{video_yt_link}}></iframe>
+  {%- endif -%}
+  </div>
+  {%- endcapture -%}
+
+  {%- capture text -%}
+  {%- if block.settings.video_position == 'left' -%}
+  <div class="content align-l">
+    {%- else -%}
+    <div class="content align-r">
+      {%- endif -%}
+      {%- if block.settings.title != blank -%}
+      <h1 class="primary">{{ block.settings.title | escape }}</h1>
+      {%- endif -%}
+
+      {{ block.settings.content }}
+
+      {% if block.settings.button_choice %}
+      <a href="{{ block.settings.link }}" class="btn">{{ block.settings.button_text | escape }}</a>
+      {%- endif -%}
+  </div>
+  {%- endcapture -%}
+
+
+    {%- if block.settings.video_position == 'right' -%}
+    <div class="right">
+      <div class="video-with-text">
+        {{ video_link }}
+        <div class="container">
+          {{ text }}
+        </div>
+      </div>
+    </div>
+    {%-else-%}
+
+    <div class="video-with-text">
+      {{ video_link }}
+      <div class="container">
+        {{ text }}
+      </div>
+    </div>
+
+    {%- endif -%}
+  {% endfor %}
+</div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Video with Text",
+  "settings": [
+  {
+    "type": "header",
+    "content": "Background"
+  },
+   {
+  "type": "color",
+  "id": "bg_color",
+  "label": "Background Color",
+  "default": "#ffffff"
+  }
+    ],
+    "blocks": [
+    {
+      "type": "select",
+      "name": "Section",
+      "settings": [
+    {
+      "type": "video_url",
+      "id": "video_link",
+      "label": "Video URL",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "select",
+      "id": "video_position",
+      "label": "Video Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your title"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers.<br>Describe a product, share announcements, or welcome customers to your store.</p>"
+    },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+      {
+        "type": "checkbox",
+        "id": "button_choice",
+        "label": "Want A Button?",
+        "default": true
+      },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Read More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "default": "/collections/all"
+    }
+  ]
+    }
+    ],
+    "presets": [
+    {
+      "category": "Video",
+      "name": "Video With Text",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}
+
+
+<style>
+
+.section-video_item{
+  display: flex;
+    width: 100%;
+}
+
+  .section.video{
+    display: flex;
+      flex-wrap: wrap;
+      padding:0;
+    }
+  
+    .section.video .right{
+      width: 100%;
+    display: flex;
+    flex-direction:row-reverse;
+    }
+  
+    .video-with-text{
+      height: auto;
+      width: 50%;
+      display: flex;
+
+    }
+  
+    .section.video .container{
+      width:50%;
+    }
+    
+    .section.video .content{
+      width:100%;
+      padding:150px 0;
+    }
+    
+    @media screen and (max-width: 999px) {
+  
+      
+    .video-with-text{
+      width: 100%;
+      display: block;
+      height:300px;
+      margin:0;
+    }
+  
+    .section.video .container{
+      width:100%;
+    }
+    
+    .content{
+      width:100%;
+    }
+  
+    .section.video .content, .section.video .content.text-right{
+      padding:0;
+      padding-top: 60px;
+    }
+    
+    .section.video .right{
+    width: 100%;
+    flex-direction: row;
+    display: block;
+    }
+  
+  
+    </style>

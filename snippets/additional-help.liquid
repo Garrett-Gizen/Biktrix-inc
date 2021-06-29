@@ -1,0 +1,87 @@
+
+  <section class="section" data-section-id="{{ section.id }}" data-section-type="text-with-icons" style="background-color:#ffffff;padding:100px 0;">
+
+    <div class="content content-full tc mbsep">
+        <h1 class="primary center">NEED A LENDING HAND?</h1>
+    </div>
+        
+    <div class="container">
+      <div class="text-with-icons text-with-icons--stacked">
+
+          <div class="text-with-icons__item help-item" data-block-index="{{ forloop.index0 }}">
+            <div class="text-with-icons__icon-wrapper">
+                <div class="icon-content" style="fill: #d2d2d2;" >{%- render 'icon', icon: 'icon-chat', stroke_width: 1.5 -%}</div>
+            </div>
+
+              <div class="text-with-icons__content-wrapper">
+                  <h5 class="text-with-icons__title">Chat With Us</h5>
+                  <div class="text-with-icons__content">Our customer service is always open and is just a click away to help you with your purchase.
+                  </div>
+                  <a href="">Chat Away Now</a>
+              </div>
+          </div>
+
+          <div class="text-with-icons__item help-item" data-block-index="{{ forloop.index0 }}">
+              <div class="text-with-icons__icon-wrapper">
+                  <div class="icon-content" style="fill: #d2d2d2;">
+                      {%- render 'icon', icon: 'icon-voice_call', stroke_width: 1.5 -%}</div>
+              </div>
+
+              <div class="text-with-icons__content-wrapper">
+                  <h5 class="text-with-icons__title">Book A Virtual Demo</h5>
+                  <div class="text-with-icons__content">Allow our E-Bike Specialists to help you to find your dream bike and to answer any questions you may have.
+                  </div>
+                  <a href="">Book An Appointment Now</a>
+              </div>
+          </div>
+
+          <div class="text-with-icons__item help-item" data-block-index="{{ forloop.index0 }}">
+            <div class="text-with-icons__icon-wrapper">
+                <div class="icon-content" style="fill: #d2d2d2;" >{%- render 'icon', icon: 'icon-phone', stroke_width: 1.5 -%}</div>
+            </div>
+
+              <div class="text-with-icons__content-wrapper">
+                  <h5 class="text-with-icons__title">Give Us A Ring</h5>
+                  <div class="text-with-icons__content">24/7 e-mail support. 8/5 phone and live chat with E-Bike Specialists to help you in anyway.
+                  </div>
+                  <a href="">+1-866-BIKTRIX</a>
+              </div>
+          </div>
+
+        </div>
+    </div>
+</div>
+  </section>
+
+  <style>
+
+.text-with-icons__item.help-item{
+    display:block;
+    text-align:center;
+    margin: 30px;
+}
+
+.text-with-icons__item.help-item .text-with-icons__icon-wrapper{
+    margin-bottom:15px;
+}
+
+.text-with-icons__item.help-item .text-with-icons__content-wrapper .text-with-icons__title{
+    text-transform:none;
+    margin-bottom:15px;
+    font-weight:600;
+}
+
+.text-with-icons__item.help-item .text-with-icons__content-wrapper a{
+    color:red;
+    text-decoration: underline;
+}
+
+.text-with-icons__item.help-item .text-with-icons__content-wrapper .text-with-icons__content{
+    margin-bottom:15px;
+}
+
+.text-with-icons__item.help-item .text-with-icons__icon-wrapper svg{
+    height:40px;
+    width:40px;
+}
+  </style>

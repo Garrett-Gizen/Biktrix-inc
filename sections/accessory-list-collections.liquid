@@ -1,0 +1,131 @@
+<section class="section" data-section-id="{{ section.id }}" data-section-type="list-collections">
+  <div class="container">
+
+
+    <div class="collection-listing">
+
+      {%- for block in section.blocks -%}
+      {%- assign collection = collections[block.settings.collection] -%}
+      {% assign collectionhandletitle = collection.title | downcase | remove: " /" | replace: " ", "-"  %}
+
+      <a class="col-3-md_gripgap" href="{{ collection.url }}"class="collection-block-item {% if section.settings.show_collection_overlay %}collection-block-item--overlay{% endif %}">
+      
+       
+
+    
+
+        {% if collection.image %}
+        <div class="card collection-card lazyload image--fade-in {% if handle contains collectionhandletitle %}selected {% endif %}" data-bg="{{ collection.image | img_url: 'master' }}"​​​​​​​>
+          {% else %}
+        <div class="card collection-card lazyload image--fade-in"  data-bg="{{ collection.image | default: collection.products.first.featured_media | img_url: '850x' }}">
+          {% endif %}
+          <h3>{{ collection.title }}</h3>
+        </div>
+      </a>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
+<style>
+  .collection-listing{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    grid-gap: 30px;
+  }
+
+  .col-3-md_gripgap{
+    width: calc(33.3333% - 20px);
+  }
+
+
+.card.collection-card{
+  padding: 75px 30px;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-size:cover;
+    background-position: center;
+    position:relative;
+}
+
+.card.collection-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  width:100%;
+  background-color:rgb(0 0 0 / 0.6);
+  border-radius:3px;
+}
+
+.card.collection-card::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  height:0%;
+  width:100%;
+  background-color:red;
+  border-radius:3px;
+  transition: height 0.3s;
+}
+
+.card.collection-card:hover::after{
+  height:100%;
+}
+
+
+.card.collection-card.selected::before{
+background-color:#222021!important;
+}
+.card.collection-card.selected:hover::after{
+  height:0%;
+}
+
+.card.collection-card h3{
+  width: 100%;
+    text-align: center;
+    z-index:1;
+    color:white;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 1000px){
+  .col-3-md_gripgap {
+    width: calc(50% - 15px);
+  }
+  }
+
+  @media screen and (max-width: 640px){
+    .col-3-md_gripgap {
+    width: calc(100%);
+  }
+  }
+</style>

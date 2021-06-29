@@ -1,0 +1,534 @@
+
+{%- capture section_settings -%}
+{
+  "showShippingEstimator": {% if template == 'product.quick-view' or product.available == false %}false{% else %}{{ section.settings.show_shipping_estimator | json }}{% endif %},
+  "showQuantitySelector": {{ section.settings.show_quantity_selector | json }},
+  "showPaymentButton": {% if product.template_suffix == 'pre-order' %}false{% else %}{{ section.settings.show_payment_button | json }}{% endif %},
+  "showInventoryQuantity": {% if product.template_suffix != 'pre-order' %}{{ section.settings.show_inventory_quantity | json }}{% else %}false{% endif %},
+  "lowInventoryThreshold": {{ section.settings.low_inventory_threshold | json }},
+  "galleryTransitionEffect": {{ section.settings.carousel_effect | json }},
+  "enableImageZoom": {% if template == 'product.quick-view' %}false{% else %}{{ section.settings.enable_image_zoom | json }}{% endif %},
+  "zoomEffect": {{ section.settings.zoom_effect | json }},
+  "enableVideoLooping": {{ section.settings.enable_video_looping | json }},
+  "productOptions": {{ product.options | json | escape }},
+  "enableHistoryState": {% if template == 'product.quick-view' %}false{% else %}true{% endif %},
+  "infoOverflowScroll": {% if template == 'product.quick-view' %}false{% else %}true{% endif %},
+  "isQuickView": {% if template == 'product.quick-view' %}true{% else %}false{% endif %}
+}
+{%- endcapture -%}
+
+<section data-section-id="{{ section.id }}" data-section-type="product" data-section-settings='{{ section_settings }}'>  
+  <div class="container product-block-list_container">
+      <div class="product-block-list">
+        <div class="product-block-list__wrapper">
+          {%- if product.media.size > 0 -%}
+
+          <div class="product-block-list__item product-image">
+            <div  class="{% if template.name == 'product' %}card--sticky{% endif %}">
+            {% render 'product-gallery' %}
+
+
+
+            <div class="product-feature-listing">
+
+                        {% for key in product.metafields.feature.details %}
+            <div class="product-feature card-list">
+            {%- render 'icon', icon: key.icon, stroke_width: 1.5 -%}
+            <h6>{{ key.title }}</h6>
+            <p>{{ key.text }}</p>
+            </div>
+                  {% endfor %}
+             </div>
+
+                <div class="product-feature-description">
+                {{ product.description }}
+                </div>
+           
+              </div>
+          </div>
+          
+          {%- endif -%}
+
+          <div  class="product-block-list__item product-information">
+            {% render 'product-info' %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+</section>
+
+
+<style>
+
+/* MODAL */
+
+.product-block-list__item.product-image{
+  padding-right: 30px;
+}
+
+.card{
+  border:0;
+}
+
+.product-block-list .product-block-list__wrapper .product-information .card{
+  border:0;
+}
+
+.product-block-list .product-block-list__wrapper .product-information .card .card__section{
+  padding-right:80px;
+}
+
+.container.product-block-list_container{
+  padding-right:0;
+}
+
+.modal-new {
+display: none; /* Hidden by default */
+position: fixed; /* Stay in place */
+z-index: 1; /* Sit on top */
+padding-top: 100px; /* Location of the box */
+left: 0;
+top: 0;
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+overflow: auto; /* Enable scroll if needed */
+background-color: rgb(0,0,0); /* Fallback color */
+background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+background-color: #fefefe;
+margin: auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+}
+
+/* The Close Button */
+.close {
+color: #aaaaaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+color: #000;
+text-decoration: none;
+cursor: pointer;
+}
+
+
+/* PRODUCT */
+.product-block-list__wrapper{
+width:100%;
+display:flex;
+flex-wrap:wrap;
+}
+
+.product-image{
+width:60%;
+}
+.product-information{
+width:40%;
+}
+
+.product-feature-listing{
+display: flex;
+flex-wrap: wrap;
+}
+
+
+.product-feature-listing .card-list{
+margin-right:30px;
+margin-bottom:30px;
+}
+
+
+.product-feature-listing .card-list:first-child{
+margin-left:0;
+}
+
+.product-feature-listing .card-list:last-child{
+margin-right:0;
+}
+
+
+
+.product-feature-listing .card-list svg{
+fill: #B2B2B2;
+height: 22px;
+margin-bottom: 8px;
+}
+
+.product-feature-listing .card-list h6{
+font-weight: bold;
+color: #222021;
+text-transform: uppercase;
+margin: 0;
+line-height: 15px;
+font-size: 14px;
+}
+
+.product-feature-listing .card-list p{
+font-size: 13px;
+color: #B2B2B2;
+}
+
+.product-feature-description{
+margin:30px 0;
+}
+
+@media screen and (max-width: 1000px){
+
+  .scroller{
+  margin:0;
+  }
+
+  .product-gallery__thumbnail-list:before{
+  content:none;
+  } 
+
+  .product-gallery__thumbnail-list {
+  margin: 0;
+  margin-top:30px;
+  display:inline-flex;
+  }
+
+  .product-block-list__item.product-image, .product-block-list__item.product-information{
+  width:100%;
+  }
+
+  .product-feature.card-list {
+  width: 50%;
+  flex-basis: calc(50% - 30px);
+  }
+
+  .product-feature-listing {
+  margin: 30px 0;
+  }
+}
+
+</style>
+
+
+<script>
+  
+  // NAVBAR SCROLL//
+  function ScrollNavbarFunction() {
+
+var productnavbar = document.getElementById("product-nav");
+var shippinginformation = document.getElementById("shipping-information");
+var shippinginformationheight = shippinginformation.offsetTop;
+
+
+if (document.body.scrollTop > 20 || document.documentElement.scrollTop > shippinginformationheight - 20) {
+productnavbar.style.top = "0";
+} else {
+productnavbar.style.top = "-75px";
+}
+}
+
+
+window.onload = function() {
+
+  // MODAL //
+  var Modal = document.getElementsByClassName("modal-new");
+  var ModalBtn = document.getElementsByClassName("modal_link_btn");
+  var SpanClose = document.getElementsByClassName("close");
+
+  // Set Modal Data //
+  function setModalData() {
+
+    for (var i = 0; i < ModalBtn.length; i++) { 
+      ModalBtn[i].setAttribute('data-index', i);
+      Modal[i].setAttribute('data-index', i); 
+      SpanClose[i].setAttribute('data-index', i); 
+    } 
+  } 
+
+  // CREATES MODAL//
+  function createBoldModal(content){
+
+    
+    var selectedspan = document.createElement("span");
+    selectedspan.classList.add("bold_option_title-option_selected");
+    selectedspan.innerHTML = "";
+
+
+    var contentss = "Battery";
+      // CREATES MAIN MODAL SECTION//
+    var ModalMain = document.createElement('div');
+    ModalMain.classList.add("modal-new");
+
+     // CREATES CONTAINER MODAL//
+    var ModalContainer = document.createElement('div');
+    ModalContainer.classList.add("modal-content");
+    ModalContainer.innerHTML = content;
+
+     // CREATES MODAL SPAN//
+    var ModalSpan = document.createElement("span");
+    ModalSpan.classList.add("close");
+    ModalSpan.innerHTML = "×";
+
+    // APPENDS MODALS //
+    BoldTitle[i].append(selectedspan);
+    ModalContainer.append(ModalSpan);
+    ModalMain.append(ModalContainer);
+    BoldTitle[i].append(ModalMain);
+  }
+
+  //BOLD//
+  var BoldTitle = document.getElementsByClassName("bold_option_title");
+  var boldoption = document.getElementsByClassName("bold_option");
+  var Accordion = document.getElementsByClassName("accordion");
+
+
+  for(var i=0; i < BoldTitle.length; i++){
+
+  //CONVERT BOLD INTO AN ACCORDION//
+    BoldTitle[i].classList.add("accordion");
+
+  //CREATE BOLD MODAL//
+    var BoldModal = BoldTitle[i].innerText.replace("Choose ", "").toLowerCase();
+    BoldModalTitle = "modal_" + BoldModal + "_title";
+    
+    var BoldModalContent;
+
+
+    var BoldModalBtn = document.createElement('button');
+    BoldModalBtn.classList.add("modal_link_btn");
+    BoldModalBtn.setAttribute("type", "button");
+
+      //FIND JSON VARIABLES FOR BOLD//
+    if(BoldModalTitle == "modal_battery_title"){
+      BoldModalBtn.innerText = {{ 'modals.modal_battery_title' | t | json }};
+      BoldModalContent = {{ pages["Battery"].content | json }};
+    }
+
+    else if(BoldModalTitle == "modal_motor_title"){
+      BoldModalBtn.innerText = {{ 'modals.modal_motor_title' | t | json }};
+      BoldModalContent = {{ pages["Motor"].content | json }};
+    }
+
+    else if(BoldModalTitle == "modal_fork_title"){
+      BoldModalBtn.innerText = {{ 'modals.modal_fork_title' | t | json }};
+      BoldModalContent = {{ pages["Fork"].content | json }};
+    }
+
+    else if(BoldModalTitle == "modal_brakes_title"){
+      BoldModalBtn.innerText = {{ 'modals.modal_brakes_title' | t | json }};
+      BoldModalContent = {{ pages["Brakes"].content | json }};
+    }
+
+    
+    else if(BoldModalTitle == "modal_headlights_title"){
+      BoldModalBtn.innerText = {{ 'modals.modal_headlights_title' | t | json }};
+      BoldModalContent = {{ pages["Brakes"].content | json }};
+    }
+
+    createBoldModal(BoldModalContent);
+    BoldTitle[i].append(BoldModalBtn);
+
+  }
+
+  setModalData();
+  ScrollNavbarFunction();
+
+  
+  // Set Data for the modal button and also close icon //
+  for (i=0; i < ModalBtn.length;i++) { 
+      ModalBtn[i].onclick=function() { 
+        var ElementIndex = this.getAttribute('data-index');
+        Modal[ElementIndex].style.display="block"; 
+      } 
+
+      SpanClose[i].onclick = function() {
+        var ElementIndex = this.getAttribute('data-index');
+        Modal[ElementIndex].style.display = "none";
+      }
+    }
+
+
+  // Close after clicking out.//
+  window.onclick = function(event) {
+    if (event.target === Modal[event.target.getAttribute('data-index')]) {
+      Modal[event.target.getAttribute('data-index')].style.display = "none";
+    }
+  }
+
+  //SIMPLE ACCORDION//
+ for(i=0; i < Accordion.length; i++){
+
+    Accordion[i].addEventListener("click", function(){
+      this.classList.toggle("open");
+      var AccordionPannel = this.nextElementSibling;
+      if(AccordionPannel.style.maxHeight){
+        AccordionPannel.style.maxHeight = null;
+      } else {
+        AccordionPannel.style.maxHeight = AccordionPannel.scrollHeight + "px";
+      }
+    });
+  }
+
+  var BoldChoiceValue = document.querySelectorAll('.bold_option_value label');
+
+  for (var i=0; i<BoldChoiceValue.length; i++){
+    var BoldChoiceChecked = BoldChoiceValue[i].querySelectorAll('input');
+
+    // Create Radio class for when selected | On Change //
+    BoldChoiceChecked.forEach(function(input){
+      input.addEventListener('change', function(element){
+
+        var boldchoice = element.currentTarget;
+        var boldchoiceactive = boldchoice.parentElement.parentElement.parentElement.parentElement.querySelector('.checked');
+        var boldchoicetitle = boldchoice.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector('.bold_option_title-option_selected');
+        boldchoiceactive && boldchoiceactive.classList.remove('checked');
+        boldchoice.parentElement.parentElement.classList.add('checked');
+        
+        boldchoicetitle.innerText = boldchoice.value;
+
+      });
+    });
+
+    for(var j=0; j<BoldChoiceChecked.length; j++){  
+
+    // Preselect the class when page loads //
+      if(BoldChoiceChecked[j].checked === true){
+        BoldChoiceValue[i].classList.add("checked");
+        BoldChoiceValue[i].parentElement.parentElement.parentElement.querySelector('.bold_option_title-option_selected').innerText = BoldChoiceChecked[j].value;
+      }
+    }
+  }
+}
+
+
+window.onresize = function(event) {
+      //SIMPLE ACCORDION//
+      var Accordion = document.getElementsByClassName("accordion");
+
+ for(i=0; i < Accordion.length; i++){
+
+  var AccordionPannel = Accordion[i].nextElementSibling;
+  if(AccordionPannel.style.maxHeight){
+    AccordionPannel.style.maxHeight = AccordionPannel.scrollHeight + "px";
+  }
+console.log(AccordionPannel.style.maxHeight);
+}
+}
+
+window.onscroll = function() {ScrollNavbarFunction()};
+</script>
+  
+
+{% schema %}
+{
+  "name": "Product page",
+  "settings": [
+    {
+      "type": "select",
+      "id": "selector_mode",
+      "label": "Selector type",
+      "options": [
+        {
+          "value": "block",
+          "label": "Block"
+        },
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        }
+      ],
+      "default": "block"
+    },
+
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "Enable video looping",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable image zoom",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "zoom_effect",
+      "label": "Desktop zoom effect",
+      "options": [
+        {
+          "value": "inside",
+          "label": "Inside"
+        },
+        {
+          "value": "outside",
+          "label": "Outside"
+        }
+      ],
+      "default": "outside"
+    },
+    {
+      "type": "select",
+      "id": "carousel_effect",
+      "label": "Transition effect",
+      "options": [
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "slide",
+          "label": "Slide"
+        }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "header",
+      "content": "Reviews"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_reviews",
+      "label": "Enable",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews_badge",
+      "label": "Show badge",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

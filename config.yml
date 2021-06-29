@@ -1,0 +1,10 @@
+development:
+  password: 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
+  theme_id: 120203215001
+  store: biktrix-inc.myshopify.com
+
+# Windows	%APPDATA%\Shopify\Themekit\variables
+# Linux/BSDs	${XDG_CONFIG_HOME}/Shopify/Themekit/variables
+# MacOSX	${HOME}/Library/Application Support/Shopify/Themekit/variables
+# Any	--vars flag provides a path to a file for loading variables
+# file to load ignore patterns, check out the ignore file example
