@@ -519,5 +519,27 @@
     "month_day_year": "%B %d, %Y",
     "short_month_day_year": "%b %d, %Y",
     "month_day_year_time": "%B %d, %Y at %H:%M%P"
+<<<<<<< Updated upstream
+=======
+  },
+
+  
+  "modals": {
+    "modal_frame-size_title": "What frame will fit me?",
+    "modal_wheelset_title": "What wheels should I choose?",
+    "modal_battery_title": "What batteries should I choose?",
+    "modal_motor_title": "What motor should I choose?",
+    "modal_fork_title": "What fork should I choose?",
+    "modal_brakes_title": "What kind of brakes should I choose?",
+    "modal_headlights_title": "Which headlights should I choose?"
+  },
+
+    
+  "e-bike_subheaders": {
+    "juggernaut_series": "ALL-TERRAIN",
+    "stunner_series": "COMFORT CRUISER",
+    "swift_series": "COMMUTER",
+    "specialty_series": "FOLDING. CARGO"
+>>>>>>> Stashed changes
   }
 }

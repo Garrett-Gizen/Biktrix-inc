@@ -409,6 +409,7 @@
                       </div>
                     {%- endif -%}
 
+<<<<<<< Updated upstream
                     <div class="cart-recap__notices rte">
                       <p>
                         {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
@@ -421,6 +422,11 @@
                           {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
                         {%- endif -%}
                       </p>
+=======
+                        <input type="checkbox" class="input-checkbox" id="cart_agree"  name="termsconditions" required onchange="TOSButtonDisable(sumbitbtn, this)"> 
+                        <label class="tos_label" for="cart_agree"> I Agree with all the Terms & Conditions that Biktrix provides. <a href="/pages/terms-of-service" target="_blank" class="tos_icon link primary-link ">More Details</a>.</label>
+    
+>>>>>>> Stashed changes
                     </div>
 
                     <input type="hidden" name="attributes[collection_products_per_page]" value="">
@@ -834,4 +840,288 @@
     }
   ]
 }
+<<<<<<< Updated upstream
 {% endschema %}
+=======
+{% endschema %}
+
+<style>
+
+.empty-state{
+  text-align: left;
+    margin: 180px auto;
+    width: fit-content;
+}
+
+.empty-state svg{
+  height: 90px;
+  fill: #B2B2B2;
+  margin-bottom: 15px;
+}
+
+.container.cart-list_container{
+  padding-right:0;
+}
+
+.cart-wrapper__inner .cart-wrapper__inner-inner{
+  display: inline-flex;
+  grid-gap: 60px;
+  width: 100%;
+}
+
+
+.page__header{
+    margin:0;
+  }
+
+  .page__header .primary{
+    padding: 60px 0;
+    margin: 0;
+  }
+
+
+  .cart-content{
+    width:60%;
+  }
+
+  .cart-recap{
+    position: relative!important;
+    top: 0!important;
+    right:0!important;
+    width:100%!important;
+  }
+
+  .card-right_toolset.card-right_toolset{
+    border: 0;
+    padding-left:30px;
+    padding-right: 80px;
+    border-radius: 0px 0px 0px 8px;
+    margin:0;
+  }
+
+  .cart-summary_container{
+    padding-top:150px;
+    width:40%;
+  }
+  
+  .cart-summary_container .card__section{
+    padding-top:0;
+  }
+
+  .cart-summary_header{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: baseline;
+  }
+
+  
+  .cart-summary_header h6{
+    width: auto;
+    margin-left: auto;
+    font-size: 16px;
+    color: #A1A1A1;
+  }
+
+  .line-item__title{
+    font-size: 18px;
+    margin-bottom: 0px;
+    color: #222021;
+    font-weight: 600;
+  }
+
+  .line-item__variant{
+    font-size: 16px;
+    line-height: 25px;
+    margin-bottom: 30px;
+    color: #707070;
+  }
+
+  .line-item__product-info-wrapper {
+    align-items: flex-start;
+}
+
+.line-item__image-wrapper {
+    width: 100px;
+    min-width: 90px;
+    margin-right: 30px;
+}
+
+.line-item__property-list, .line-item__options-value-list{
+  font-size: 13px;
+    line-height: 25px;
+    margin: 0;
+    list-style: none;
+}
+
+.line-item__property-list{
+  margin-top:15px;
+}
+
+.article-item.cart-item{
+  padding:30px;
+  margin-bottom:30px;
+  position:relative;
+}
+
+
+.article-item.cart-item:last-child{
+  margin-bottom:0px;
+}
+
+table.cart-item_table{
+  width:100%;
+}
+
+table.cart-item_table tr td{
+  padding: 0 30px;
+}
+
+table.cart-item_table tr td:last-child,table.cart-item_table tr td:first-child{
+  padding: 0px;
+}
+
+table.cart-item_table td.line-item__line-price{
+  text-align: right;
+}
+
+table.cart-item_table td.line-item__line-price h5{
+  color: #A1A1A1;
+    font-size: 15px;
+    font-weight: 200;
+    margin-bottom: 0;
+    text-decoration: line-through;
+    margin:0;
+}
+
+table.cart-item_table td.line-item__line-price h3{
+  font-size: 20px;
+    color: #616161;
+    font-weight: 400;
+}
+
+table.cart-item_table .quantity-selector__value{
+  width: 28px;
+    min-width: 0;
+    padding: 0;
+}
+
+
+table.cart-item_table .line-item__product-image{
+  display:flex;
+}
+
+table.cart-item_table .line-item__product-info{
+  padding:0;
+  width:45%;
+}
+
+.line-item__quantity-remove{
+  position: absolute;
+    top: 16px;
+    right: 18px;
+    margin: 0;
+}
+
+.line-item__quantity-remove svg{
+  width: 24px;
+    height: auto;
+    fill: #D1D1D1;
+    transition:fill 0.3s;
+}
+
+.line-item__quantity-remove svg:hover{
+    fill:  var(--primary-color);
+}
+
+.cart-recap__price-line{
+  align-items: center;
+}
+
+.cart-recap__price-line.cart-savings{
+  margin-bottom:30px;
+}
+
+
+.cart-recap__price-line .cart-recap__price-line-label{
+  font-size: 16px;
+    color: #616161;
+    font-weight: 500;
+}
+
+.cart-recap__price-line .cart-recap__price-line-price{
+  font-size: 22px;
+}
+
+
+.cart-recap__price-line .cart-recap__price-line-price.savings{
+color:red;
+font-size: 18px;
+}
+
+.btn.disabled::after{
+  content: "";
+    width: calc(100% - -4px);
+    height: calc(100% - -4px);
+    background-color: #ffffff63;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    border-radius: 3px;
+    cursor: not-allowed;
+}
+
+
+.btn.disabled:hover{
+  background-color:var(--primary-color)!important;
+  color:white;
+}
+
+.link.primary-link{
+  color:var(--primary-color)!important;
+  text-decoration: none!important;
+}
+
+.tos_label{
+  font-size: 14px;
+    line-height: 20px;
+    margin-top: 15px;
+}
+
+
+
+
+
+</style>
+
+<script defer>
+
+var termsofserviceinput, sumbitbtn
+
+termsofserviceinput = document.getElementById("cart_agree");
+sumbitbtn = document.getElementsByClassName("cart-submit");
+
+function TOSButtonDisable(btn1, checkbox){
+  for(var i=0; i < btn1.length; i++){
+  if(checkbox.checked){
+    btn1[i].classList.remove("disabled");
+    btn1[i].disabled = false;
+  }
+  else{
+    btn1[i].classList.add("disabled");
+    btn1[i].disabled = true;
+  }
+}
+}
+
+
+document.querySelector('.loading-bar').addEventListener('transitionend', function(){
+  TOSButtonDisable(sumbitbtn, termsofserviceinput);
+});
+
+document.addEventListener("DOMContentLoaded", function(){
+  TOSButtonDisable(sumbitbtn, termsofserviceinput);
+});
+
+</script>
+>>>>>>> Stashed changes

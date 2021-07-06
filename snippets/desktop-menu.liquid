@@ -7,6 +7,8 @@ is displayed as a dropdown). However on the second style, the mega-menu is check
 always visible.
 {%- endcomment -%}
 
+{% assign variable = value %}
+
 {%- assign mega_menus = section.blocks | map: 'settings' | map: 'menu_item' -%}
 
 {%- if section.settings.desktop_navigation_layout == 'condensed' -%}
@@ -30,8 +32,8 @@ always visible.
 {%- if is_floating == false and is_mega_menu -%}
   {%- render 'mega-menu', is_floating: is_floating, mega_menu: menu, index: index -%}
 {%- else -%}
-  <ul id="{{ index }}" class="nav-dropdown {% if is_floating %}nav-dropdown--floating {% if mega_menus.size > 0 %}nav-dropdown--fixed {% endif %}{% elsif menu.levels == 1 %}nav-dropdown--restrict{% endif %}" data-type="menu" aria-hidden="true" role="list">
-    {%- if is_floating -%}
+  <div id="{{ index }}" class="nav-dropdown {% if is_floating %}nav-dropdown--floating {% if mega_menus.size > 0 %}nav-dropdown--fixed {% endif %}{% elsif menu.levels == 1 %}nav-dropdown--restrict{% endif %}" data-type="menu" aria-hidden="true" role="list">
+   <ul class="nav-dropdown_menu"> {%- if is_floating -%}
       {%- render 'icon', icon: 'nav-triangle-borderless' -%}
     {%- endif -%}
 
@@ -49,8 +51,20 @@ always visible.
       {%- endfor -%}
 
       <li class="nav-dropdown__item {% if is_mega_menu %}has-mega-menu{% endif %}">
+
+
+        {% assign ebike-subheader_value =  link.title | replace: " ", "_" | downcase %}
+  
         {%- if link.links.size == 0 -%}
-          <a href="{{ link.url }}" class="nav-dropdown__link link" data-type="menuitem">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="nav-dropdown__link link" data-type="menuitem" aria-expanded="false" aria-controls="{{ index_nested }}" aria-haspopup="true">{{ link.title }} <span>{{ 'e-bike_subheaders.' | append:ebike-subheader_value | t }}</span> {%- render 'icon', icon: 'arrow-right' -%}</a>
+       
+        
+        <ul id="{{ index_nested_nested }}" class="nav-dropdown {% if is_floating %}nav-dropdown--floating{% endif %}" data-type="menu" aria-hidden="true" role="list">
+          <li class="nav-dropdown__item">
+            <a href="{{ sub_sub_link.url }}" class="nav-dropdown__link link" data-type="menuitem">test</a>
+          </li>
+      </ul>
+       
         {%- else -%}
           {%- capture index_nested -%}{{ index }}-{% increment nav_dropdown %}{%- endcapture -%}
           <a href="{{ link.url }}" class="nav-dropdown__link link" data-type="menuitem" aria-expanded="false" aria-controls="{{ index_nested }}" aria-haspopup="true">{{- link.title -}} {%- render 'icon', icon: 'arrow-right' -%}</a>
@@ -59,7 +73,6 @@ always visible.
             {%- render 'mega-menu', is_floating: is_floating, mega_menu: link, index: index_nested -%}
           {%- else -%}
             <ul id="{{ index_nested }}" class="nav-dropdown {% if is_floating %}nav-dropdown--floating{% endif %}" data-type="menu" aria-hidden="true" role="list">
-              {%- render 'icon', icon: 'nav-triangle-left' -%}
 
               {%- for sub_link in link.links -%}
                 <li class="nav-dropdown__item">
@@ -88,4 +101,5 @@ always visible.
       </li>
     {%- endfor -%}
   </ul>
+  </div>
 {%- endif -%}
