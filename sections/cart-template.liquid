@@ -88,7 +88,7 @@
                                       {%- continue -%}
                                     {%- endif -%}
 
-                                    <li class="line-item__property"><strong>{{ property.first | remove: "Choose"  }}:</strong> {{ property.last }}</li>
+                                    <li class="line-item__property">{{ property.last }}</li>
                                   {%- endfor -%}
                                 </ul>
                               {%- endunless -%}
@@ -217,12 +217,12 @@
                     </div>
                     {%- endif -%}
 
-                   <div class="cart-recap__notices rte">
+       
 
-                        <input type="checkbox" class="input-checkbox" id="cart_agree"  name="termsconditions" required> 
-                        <label class="tos_label" for="cart_agree"> I Agree with all the Terms & Conditions that Biktrix provides. <a href="/pages/terms-of-service" target="_blank" class="tos_icon link primary-link ">More Details</a>.</label>
+                    <input type="checkbox" class="input-checkbox" id="cart_agree" name="termsconditions" required onchange="TOSButtonDisable(sumbitbtn, this)">
+                    <label class="tos_label" for="cart_agree">I Agree with all the Terms & Conditions that Biktrix provides. <a href="/pages/terms-of-service" target="_blank" class="tos_icon link ">More Details</a></label>
     
-                    </div>
+       
 
                     <input type="hidden" name="attributes[collection_products_per_page]" value="">
                     <input type="hidden" name="attributes[collection_layout]" value="">
@@ -625,7 +625,7 @@
   font-size: 13px;
     line-height: 25px;
     margin: 0;
-    list-style: none;
+    list-style: inside;
 }
 
 .line-item__property-list{
@@ -762,30 +762,42 @@ font-size: 18px;
     margin-top: 15px;
 }
 
+.btn.cart-submit{
+  margin-top: 30px;
+}
 
-
-
-
+.tos_icon{
+  color:var(--primary-color)!important;
+}
 </style>
 
-<script>
+<script defer="">
 
-var termsofserviceinput, sumbitbtn
-
-termsofserviceinput = document.getElementById("cart_agree");
-sumbitbtn = document.getElementsByClassName("cart-submit");
-
-termsofserviceinput.addEventListener("change", function(){
-for(var i=0; i < sumbitbtn.length; i++){
-  if(termsofserviceinput.checked){
-    sumbitbtn[i].classList.remove("disabled");
-    sumbitbtn[i].disabled = false;
+  var termsofserviceinput, sumbitbtn
+  
+  termsofserviceinput = document.getElementById("cart_agree");
+  sumbitbtn = document.getElementsByClassName("cart-submit");
+  
+  function TOSButtonDisable(btn1, checkbox){
+    for(var i=0; i < btn1.length; i++){
+    if(checkbox.checked){
+      btn1[i].classList.remove("disabled");
+      btn1[i].disabled = false;
+    }
+    else{
+      btn1[i].classList.add("disabled");
+      btn1[i].disabled = true;
+    }
   }
-  else{
-    sumbitbtn[i].classList.add("disabled");
-    sumbitbtn[i].disabled = true;
   }
-}
-});
-
-</script>
+  
+  
+  document.querySelector('.loading-bar').addEventListener('transitionend', function(){
+    TOSButtonDisable(sumbitbtn, termsofserviceinput);
+  });
+  
+  document.addEventListener("DOMContentLoaded", function(){
+    TOSButtonDisable(sumbitbtn, termsofserviceinput);
+  });
+  
+  </script>
