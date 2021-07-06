@@ -219,7 +219,7 @@
 
                    <div class="cart-recap__notices rte">
 
-                        <input type="checkbox" class="input-checkbox" id="cart_agree"  name="termsconditions" required> 
+                        <input type="checkbox" class="input-checkbox" id="cart_agree"  name="termsconditions" required onchange="TOSButtonDisable(sumbitbtn, this)"> 
                         <label class="tos_label" for="cart_agree"> I Agree with all the Terms & Conditions that Biktrix provides. <a href="/pages/terms-of-service" target="_blank" class="tos_icon link primary-link ">More Details</a>.</label>
     
                     </div>
@@ -768,24 +768,33 @@ font-size: 18px;
 
 </style>
 
-<script>
+<script defer>
 
 var termsofserviceinput, sumbitbtn
 
 termsofserviceinput = document.getElementById("cart_agree");
 sumbitbtn = document.getElementsByClassName("cart-submit");
 
-termsofserviceinput.addEventListener("change", function(){
-for(var i=0; i < sumbitbtn.length; i++){
-  if(termsofserviceinput.checked){
-    sumbitbtn[i].classList.remove("disabled");
-    sumbitbtn[i].disabled = false;
+function TOSButtonDisable(btn1, checkbox){
+  for(var i=0; i < btn1.length; i++){
+  if(checkbox.checked){
+    btn1[i].classList.remove("disabled");
+    btn1[i].disabled = false;
   }
   else{
-    sumbitbtn[i].classList.add("disabled");
-    sumbitbtn[i].disabled = true;
+    btn1[i].classList.add("disabled");
+    btn1[i].disabled = true;
   }
 }
+}
+
+
+document.querySelector('.loading-bar').addEventListener('transitionend', function(){
+  TOSButtonDisable(sumbitbtn, termsofserviceinput);
+});
+
+document.addEventListener("DOMContentLoaded", function(){
+  TOSButtonDisable(sumbitbtn, termsofserviceinput);
 });
 
 </script>

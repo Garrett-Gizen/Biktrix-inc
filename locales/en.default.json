@@ -535,6 +535,14 @@
     "modal_fork_title": "What fork should I choose?",
     "modal_brakes_title": "What kind of brakes should I choose?",
     "modal_headlights_title": "Which headlights should I choose?"
+  },
+
+    
+  "e-bike_subheaders": {
+    "juggernaut_series": "ALL-TERRAIN",
+    "stunner_series": "COMFORT CRUISER",
+    "swift_series": "COMMUTER",
+    "specialty_series": "FOLDING. CARGO"
   }
 }
 
